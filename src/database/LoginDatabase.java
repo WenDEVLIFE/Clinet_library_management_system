@@ -26,6 +26,7 @@ public class LoginDatabase {
         return instance;
     }
 
+    // This is for login the student
     public void loginStudent(String username, String password, MAIN main) {
         String query = "SELECT * FROM student WHERE username = ? AND password = ?";
 
@@ -57,6 +58,7 @@ public class LoginDatabase {
         }
     }
 
+    // This is for login the admin
     public void loginAdmin(String username, String password, String keycard, MAIN main) {
         String query = "SELECT * FROM admin WHERE admin_id = ? AND password = ? AND key_pass = ?";
 
@@ -100,6 +102,8 @@ public class LoginDatabase {
             e.printStackTrace();
         }
     }
+
+    // This is for login the librarian
         public void loginLibrarian(String username, String password, MAIN main) {
             String query = "SELECT * FROM librarian WHERE librarian_id = ? AND password = ?";
 
