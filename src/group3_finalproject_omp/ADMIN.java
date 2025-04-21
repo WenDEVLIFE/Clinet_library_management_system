@@ -1884,6 +1884,79 @@ public class ADMIN extends javax.swing.JFrame {
     private void LB_EDITActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LB_EDITActionPerformed
         // TODO add your handling code here:
 
+        int selectedRow = LB_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            // Retrieve current librarian details from the table
+            String librarianID = model1.getValueAt(selectedRow, 0).toString();
+            String fullName = model1.getValueAt(selectedRow, 1).toString();
+            String emailAddress = model1.getValueAt(selectedRow, 7).toString();
+            String phoneNumber = model1.getValueAt(selectedRow, 6).toString();
+            String homeAddress = model1.getValueAt(selectedRow, 4).toString();
+            String password = model1.getValueAt(selectedRow, 2).toString();
+            String birthdate = model1.getValueAt(selectedRow, 3).toString();
+            String gwa = model1.getValueAt(selectedRow, 5).toString();
+
+            // Create input fields
+            JTextField fullNameField = new JTextField(fullName);
+            JTextField emailAddressField = new JTextField(emailAddress);
+            JTextField phoneNumberField = new JTextField(phoneNumber);
+            JTextField homeAddressField = new JTextField(homeAddress);
+            JTextField passwordField = new JTextField(password);
+            JTextField birthdateField = new JTextField(birthdate);
+            JTextField gwaField = new JTextField(gwa);
+
+            // Create a panel to hold the input fields
+            JPanel panel = new JPanel(new GridLayout(7, 2, 5, 5));
+            panel.add(new JLabel("Full Name:"));
+            panel.add(fullNameField);
+            panel.add(new JLabel("Email Address:"));
+            panel.add(emailAddressField);
+            panel.add(new JLabel("Phone Number:"));
+            panel.add(phoneNumberField);
+            panel.add(new JLabel("Home Address:"));
+            panel.add(homeAddressField);
+            panel.add(new JLabel("Password:"));
+            panel.add(passwordField);
+            panel.add(new JLabel("Birthdate:"));
+            panel.add(birthdateField);
+            panel.add(new JLabel("GWA:"));
+            panel.add(gwaField);
+
+
+            // Show the dialog
+            int result = JOptionPane.showConfirmDialog(
+                    this, panel, "Edit Librarian Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result == JOptionPane.OK_OPTION) {
+                // Retrieve updated values
+                String updatedFullName = fullNameField.getText();
+                String updatedEmailAddress = emailAddressField.getText();
+                String updatedPhoneNumber = phoneNumberField.getText();
+                String updatedHomeAddress = homeAddressField.getText();
+                String updatedPassword = passwordField.getText();
+                String updatedBirthdate = birthdateField.getText();
+                String updatedGwa = gwaField.getText();
+
+                // Create a map for the updated data
+                Map<String, String> librarianData = new HashMap<>();
+                librarianData.put("full_name", updatedFullName);
+                librarianData.put("email_address", updatedEmailAddress);
+                librarianData.put("phone_number", updatedPhoneNumber);
+                librarianData.put("home_address", updatedHomeAddress);
+                librarianData.put("password", updatedPassword);
+                librarianData.put("birthdate", updatedBirthdate);
+                librarianData.put("gwa", updatedGwa);
+                // Update the librarian in the database
+                LibrarianDatabase.getInstance().updateLibrarian(librarianID, librarianData);
+
+                // Reload the librarian table
+                LoadLibrarian();
+
+            }
+        }
+
 
     }//GEN-LAST:event_LB_EDITActionPerformed
 
@@ -1948,9 +2021,7 @@ public class ADMIN extends javax.swing.JFrame {
              JTextField passwordField = new JTextField(password);
 
              // Create a panel to hold the input fields
-             JPanel panel = new JPanel(new GridLayout(9, 2, 5, 5)); // Adjusted to 9 rows and 2 columns
-             panel.add(new JLabel("Admin ID:"));
-             panel.add(adminIDField);
+             JPanel panel = new JPanel(new GridLayout(8, 2, 5, 5)); // Adjusted to 9 rows and 2 columns
              panel.add(new JLabel("Full Name:"));
              panel.add(fullNameField);
              panel.add(new JLabel("Key Password:"));

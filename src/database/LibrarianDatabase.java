@@ -117,4 +117,38 @@ public class LibrarianDatabase {
              e.printStackTrace();
         }
     }
+
+    public void updateLibrarian(String librarianID, Map<String, String> librarianData) {
+
+        String query = "UPDATE librarian SET password = ?, full_name = ?, birthdate = ?, home_address = ?, gwa = ?, phone_number = ?, email_address = ? WHERE librarian_id = ?";
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            double gwa = Double.parseDouble(librarianData.get("gwa"));
+            preparedStatement.setString(1, librarianData.get("password"));
+            preparedStatement.setString(2, librarianData.get("full_name"));
+            preparedStatement.setString(3, librarianData.get("birthdate"));
+            preparedStatement.setString(4, librarianData.get("home_address"));
+            preparedStatement.setDouble(5, gwa);
+            preparedStatement.setString(6, librarianData.get("phone_number"));
+            preparedStatement.setString(7, librarianData.get("email_address"));
+            preparedStatement.setString(8, librarianID);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Librarian updated successfully!");
+
+                // Optionally, you can show a success message to the user
+                JOptionPane.showMessageDialog(null, "Librarian updated successfully!");
+            } else {
+                System.out.println("Failed to update the librarian.");
+            }
+
+        } catch (Exception e) {
+             e.printStackTrace();
+        }
+    }
 }
