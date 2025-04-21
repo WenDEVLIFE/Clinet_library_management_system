@@ -5,6 +5,7 @@
  */
 package group3_finalproject_omp;
 
+import database.LibrarianDatabase;
 import database.StudentDatabase;
 import model.StudentModel;
 
@@ -909,6 +910,11 @@ public class ADMIN extends javax.swing.JFrame {
         LB_CREATE.setRequestFocusEnabled(false);
         LB_CREATE.setRolloverEnabled(false);
         LB_CREATE.setVerifyInputWhenFocusTarget(false);
+        LB_CREATE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LB_CREATEActionPerformed(evt);
+            }
+        });
         LIBRARIAN_ACCOUNT_PANEL.add(LB_CREATE, new org.netbeans.lib.awtextra.AbsoluteConstraints(291, 618, 120, 30));
 
         LB_EDIT.setBackground(new java.awt.Color(255, 243, 148));
@@ -1349,6 +1355,52 @@ public class ADMIN extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_ST_CREATEActionPerformed
+
+    private void LB_CREATEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LB_CREATEActionPerformed
+
+        String librarianName = LB_FULLNAME.getText();
+        String librarianID = LB_LIBID.getText();
+        String librarianEmail = LB_EMAILADD.getText();
+        String librarianHome = LB_HOMEADD.getText();
+        String librarianPass = LB_PASSWORD.getText();
+        String librarianPhonenum = LB_PHONENUM.getText();
+        String librarianBirthdate = LB_BIRTHDATE.getText();
+        String librarianConfirmPass = LB_CONFIRMPASS.getText();
+        String librarianGWA = LB_GWA.getText();
+
+        if (librarianName.isEmpty() || librarianID.isEmpty()|| librarianEmail.isEmpty() || librarianHome.isEmpty() || librarianPass.isEmpty() || librarianConfirmPass.isEmpty() || librarianGWA.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (!librarianPass.equals(librarianConfirmPass)) {
+            JOptionPane.showMessageDialog(this, "Passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+
+            Map<String, String> librarianData = new HashMap<>();
+            librarianData.put("full_name", librarianName);
+            librarianData.put("librarian_id", librarianID);
+            librarianData.put("email_address", librarianEmail);
+            librarianData.put("phone_number", librarianPhonenum);
+            librarianData.put("home_address", librarianHome);
+            librarianData.put("password", librarianPass);
+            librarianData.put("birthdate", librarianBirthdate);
+            librarianData.put("gwa", librarianGWA);
+
+            LibrarianDatabase.getInstance().insertLibrarian(librarianData);
+            LB_FULLNAME.setText("");
+            LB_LIBID.setText("");
+            LB_PHONENUM.setText("");
+            LB_EMAILADD.setText("");
+            LB_HOMEADD.setText("");
+            LB_PASSWORD.setText("");
+            LB_CONFIRMPASS.setText("");
+            LB_BIRTHDATE.setText("");
+            LB_GWA.setText("");
+
+        }
+
+
+
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LB_CREATEActionPerformed
 
     // Load the student data into the table
     void LoadStudent() {
