@@ -8,6 +8,7 @@ package group3_finalproject_omp;
 import database.AdminDatabase;
 import database.LibrarianDatabase;
 import database.StudentDatabase;
+import model.AdminModel;
 import model.LibraryModel;
 import model.StudentModel;
 
@@ -28,9 +29,11 @@ public class ADMIN extends javax.swing.JFrame {
     String adminID;
     DefaultTableModel model;
     DefaultTableModel model1;
+    DefaultTableModel model2;
 
     List<StudentModel> studentList;
     List<LibraryModel> librarianList;
+    List<AdminModel> adminModelList;
     /**
      * Creates new form ADMIN
      */
@@ -67,6 +70,13 @@ public class ADMIN extends javax.swing.JFrame {
         LB_TABLE.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         LoadLibrarian();
+
+        String[] columns2 = {"Admin ID", "Full Name", "Key Password", "Education Attainment", "Phone Number", "Email Address", "Home Address", "Admin Number"};
+        model2 = new DefaultTableModel(columns2, 0);
+        AD_TABLE.setModel(model2);
+
+        LoadAdmin();
+
 
     }
 
@@ -810,6 +820,11 @@ public class ADMIN extends javax.swing.JFrame {
         ST_CLEAR.setRequestFocusEnabled(false);
         ST_CLEAR.setRolloverEnabled(false);
         ST_CLEAR.setVerifyInputWhenFocusTarget(false);
+        ST_CLEAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ST_CLEARActionPerformed(evt);
+            }
+        });
         STUDENT_ACCOUNT_PANEL.add(ST_CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(611, 618, 120, 30));
 
         ST_REMOVE.setBackground(new java.awt.Color(212, 188, 3));
@@ -953,6 +968,11 @@ public class ADMIN extends javax.swing.JFrame {
         LB_CLEAR.setRequestFocusEnabled(false);
         LB_CLEAR.setRolloverEnabled(false);
         LB_CLEAR.setVerifyInputWhenFocusTarget(false);
+        LB_CLEAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LB_CLEARActionPerformed(evt);
+            }
+        });
         LIBRARIAN_ACCOUNT_PANEL.add(LB_CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(611, 618, 120, 30));
 
         LB_REMOVE.setBackground(new java.awt.Color(212, 188, 3));
@@ -1050,6 +1070,11 @@ public class ADMIN extends javax.swing.JFrame {
         AD_CLEAR.setRequestFocusEnabled(false);
         AD_CLEAR.setRolloverEnabled(false);
         AD_CLEAR.setVerifyInputWhenFocusTarget(false);
+        AD_CLEAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AD_CLEARActionPerformed(evt);
+            }
+        });
         ADMIN_ACCOUNT_PANEL.add(AD_CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(609, 609, 120, 30));
 
         AD_REMOVE.setBackground(new java.awt.Color(205, 151, 4));
@@ -1465,6 +1490,55 @@ public class ADMIN extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AD_CREATEActionPerformed
 
+    // This is for clear student
+    private void ST_CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ST_CLEARActionPerformed
+        // TODO add your handling code here:
+        ST_FULLNAME.setText("");
+        ST_STNUMBER.setText("");
+        ST_PHONENUM.setText("");
+        ST_EMAILADD.setText("");
+        ST_HOMEADD.setText("");
+        ST_PASSWORD.setText("");
+        ST_CONFIRMPASS.setText("");
+        ST_USERNAME.setText("");
+        ST_YEARSEC.setText("");
+
+        
+    }//GEN-LAST:event_ST_CLEARActionPerformed
+
+    // This is for clear librarian
+    private void LB_CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LB_CLEARActionPerformed
+        // TODO add your handling code here:
+        LB_FULLNAME.setText("");
+        LB_LIBID.setText("");
+        LB_PHONENUM.setText("");
+        LB_EMAILADD.setText("");
+        LB_HOMEADD.setText("");
+        LB_PASSWORD.setText("");
+        LB_CONFIRMPASS.setText("");
+        LB_BIRTHDATE.setText("");
+        LB_GWA.setText("");
+        LB_LIBID.setText("");
+
+    }//GEN-LAST:event_LB_CLEARActionPerformed
+
+    // This is for clear admin
+    private void AD_CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AD_CLEARActionPerformed
+        // TODO add your handling code here:
+        AD_FULLNAME.setText("");
+        AD_ADMINID.setText("");
+        AD_PHONENUM.setText("");
+        AD_EMAILADD.setText("");
+        AD_HOMEADD.setText("");
+        AD_PASSWORD.setText("");
+        AD_CONFIRMPASS.setText("");
+        AD_EDUCATTAIN.setText("");
+        AD_KEYPASS.setText("");
+        AD_ADMINNUM.setText("");
+    }//GEN-LAST:event_AD_CLEARActionPerformed
+
+
+
     // Load the student data into the table
     void LoadStudent() {
         model.setRowCount(0); // Clear existing rows
@@ -1509,6 +1583,28 @@ public class ADMIN extends javax.swing.JFrame {
     }
 
 
+     void LoadAdmin() {
+         model2.setRowCount(0); // Clear existing rows
+         adminModelList = AdminDatabase.getInstance().getAdmin();
+
+         if (adminModelList != null) {
+             for (AdminModel admin : adminModelList) {
+                 model2.addRow(new Object[]{
+                         admin.getAdminID(),
+                         admin.getFullname(),
+                         admin.getKeyPassword(),
+                         admin.getEducationAttainment(),
+                         admin.getPhoneNumber(),
+                         admin.getEmailAddress(),
+                         admin.getHomeAddress(),
+                         admin.getAdminNumber()
+                 });
+             }
+         } else {
+             System.out.println("No admins found.");
+         }
+
+     }
 
 
 

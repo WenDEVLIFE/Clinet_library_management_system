@@ -1,8 +1,13 @@
 package database;
 
+import model.AdminModel;
+
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class AdminDatabase {
@@ -55,5 +60,36 @@ public class AdminDatabase {
         } catch (Exception e) {
              e.printStackTrace();
         }
+    }
+
+    public List<AdminModel> getAdmin(){
+        List <AdminModel> adminList = new ArrayList<>();
+        String query = "SELECT * FROM admin";
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String id = resultSet.getString("user_id");
+                String adminID = resultSet.getString("admin_id");
+                String fullname = resultSet.getString("full_name");
+                String keyPassword = resultSet.getString("key_pass");
+                String educationAttainment = resultSet.getString("education_attainment");
+                String phoneNumber = resultSet.getString("phone_number");
+                String emailAddress = resultSet.getString("email_address");
+                String homeAddress = resultSet.getString("home_address");
+                String adminNumber = resultSet.getString("admin_number");
+
+                AdminModel adminModel = new AdminModel(id, adminID, fullname, keyPassword, educationAttainment, phoneNumber, emailAddress, homeAddress, adminNumber);
+                // Add the adminModel to a list or process it as needed
+                adminList.add(adminModel);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return adminList;
     }
 }
