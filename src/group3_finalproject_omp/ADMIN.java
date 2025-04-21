@@ -1406,6 +1406,7 @@ public class ADMIN extends javax.swing.JFrame {
             LB_CONFIRMPASS.setText("");
             LB_BIRTHDATE.setText("");
             LB_GWA.setText("");
+            LoadLibrarian();
 
         }
 
