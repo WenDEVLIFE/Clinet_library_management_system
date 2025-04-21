@@ -28,12 +28,14 @@ public class ADMIN extends javax.swing.JFrame {
     DefaultTableModel model2;
     DefaultTableModel model3;
     DefaultTableModel model4;
+    DefaultTableModel model5;
 
     List<StudentModel> studentList;
     List<LibraryModel> librarianList;
     List<AdminModel> adminModelList;
     List<BookModel> bookList;
     List<IssueBookModel> issueBookList;
+    List<IssueBookModel> returnBookList;
     /**
      * Creates new form ADMIN
      */
@@ -89,6 +91,13 @@ public class ADMIN extends javax.swing.JFrame {
         IB_TABALE.setModel(model4);
 
         LoadIssueBook();
+
+         String [] columns5 = {"Issue ID", "Issue Date", "Return Date", "Name", "ISBN", "Phone Number", "Status"};
+        model5 = new DefaultTableModel(columns5, 0);
+        RB_TABLE.setModel(model5);
+
+        LoadReturnBook();
+
 
 
 
@@ -571,6 +580,11 @@ public class ADMIN extends javax.swing.JFrame {
         IS_CLEAR1.setRequestFocusEnabled(false);
         IS_CLEAR1.setRolloverEnabled(false);
         IS_CLEAR1.setVerifyInputWhenFocusTarget(false);
+        IS_CLEAR1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IS_CLEAR1ActionPerformed(evt);
+            }
+        });
         RETURN_BOOK_PANEL.add(IS_CLEAR1, new org.netbeans.lib.awtextra.AbsoluteConstraints(754, 549, 131, 30));
 
         RETURN_BOOK_LAYOUT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ADM_MANAGEBOOK/ADM_RETURNBOOK_FRAME.png"))); // NOI18N
@@ -1705,12 +1719,24 @@ public class ADMIN extends javax.swing.JFrame {
                 RB_RETURNDATE.setText("");
                 RB_BOOKSTATUS.setText("");
 
-             LoadIssueBook();
+             LoadReturnBook();
          }
 
 
 
     }//GEN-LAST:event_IS_EDIT1ActionPerformed
+
+    // This will clear the return book
+    private void IS_CLEAR1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IS_CLEAR1ActionPerformed
+        // TODO add your handling code here:
+        RB_ISBN.setText("");
+        RB_NAME.setText("");
+        RB_PHONENUMBER.setText("");
+        RB_ISSUEID.setText("");
+        RB_ISSUEDATE.setText("");
+        RB_RETURNDATE.setText("");
+        RB_BOOKSTATUS.setText("");
+    }//GEN-LAST:event_IS_CLEAR1ActionPerformed
 
 
 
@@ -1816,6 +1842,27 @@ public class ADMIN extends javax.swing.JFrame {
                         issue.getIsbn(),
                         issue.getPhone_number(),
                         issue.getEmail_address(),
+                        issue.getStatus()
+                });
+            }
+        } else {
+            System.out.println("No issued books found.");
+        }
+    }
+
+    void LoadReturnBook() {
+        model5.setRowCount(0); // Clear existing rows
+        returnBookList = IssueBookDatabase.getInstance().getReturnBook();
+
+        if (returnBookList != null) {
+            for (IssueBookModel issue : returnBookList) {
+                model5.addRow(new Object[]{
+                        issue.getIssue_id(),
+                        issue.getIssue_date(),
+                        issue.getReturn_date(),
+                        issue.getName(),
+                        issue.getIsbn(),
+                        issue.getPhone_number(),
                         issue.getStatus()
                 });
             }
