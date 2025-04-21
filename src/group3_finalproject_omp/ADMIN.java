@@ -181,7 +181,6 @@ public class ADMIN extends javax.swing.JFrame {
         setAutoRequestFocus(false);
         setBackground(new java.awt.Color(255, 254, 252));
         setLocation(new java.awt.Point(380, 180));
-        setMaximumSize(new java.awt.Dimension(1190, 695));
         setMinimumSize(new java.awt.Dimension(1190, 695));
         setResizable(false);
         setSize(new java.awt.Dimension(1190, 695));
@@ -663,13 +662,13 @@ public class ADMIN extends javax.swing.JFrame {
         ST_TABLE.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         ST_TABLE.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         ST_TABLE.setFocusable(false);
@@ -685,6 +684,11 @@ public class ADMIN extends javax.swing.JFrame {
         ST_FULLNAME.setFont(new java.awt.Font("Candara Light", 1, 12)); // NOI18N
         ST_FULLNAME.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         ST_FULLNAME.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(226, 167, 20)));
+        ST_FULLNAME.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ST_FULLNAMEActionPerformed(evt);
+            }
+        });
         STUDENT_ACCOUNT_PANEL.add(ST_FULLNAME, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 200, 292, 25));
 
         ST_STNUMBER.setBackground(new java.awt.Color(248, 243, 232));
@@ -743,6 +747,11 @@ public class ADMIN extends javax.swing.JFrame {
         ST_CREATE.setRequestFocusEnabled(false);
         ST_CREATE.setRolloverEnabled(false);
         ST_CREATE.setVerifyInputWhenFocusTarget(false);
+        ST_CREATE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ST_CREATEActionPerformed(evt);
+            }
+        });
         STUDENT_ACCOUNT_PANEL.add(ST_CREATE, new org.netbeans.lib.awtextra.AbsoluteConstraints(291, 618, 120, 30));
 
         ST_EDIT.setBackground(new java.awt.Color(255, 243, 148));
@@ -1270,6 +1279,26 @@ public class ADMIN extends javax.swing.JFrame {
         ADM_DASHBOARD.setIcon(new ImageIcon(getClass().getResource("/ADM/ADM_DASHBOARD.png")));
     }//GEN-LAST:event_ADM_ACCOUNTMouseClicked
 
+    private void ST_FULLNAMEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ST_FULLNAMEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ST_FULLNAMEActionPerformed
+
+    private void ST_CREATEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ST_CREATEActionPerformed
+        // TODO add your handling code here:
+        String studentName = ST_FULLNAME.getText();
+        String studentID = ST_STNUMBER.getText();
+        String studentNum = ST_PHONENUM.getText();
+        String studentEmail = ST_EMAILADD.getText();
+        String studentHome = ST_HOMEADD.getText();
+        String studentPass = ST_PASSWORD.getText();
+        String studentConfirmPass = ST_CONFIRMPASS.getText();
+        String yearLevel = ST_YEARSEC.getText();
+
+        if
+
+
+    }//GEN-LAST:event_ST_CREATEActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1435,17 +1464,5 @@ public class ADMIN extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
-
-    public void setAdminId(String adminId) {
-         this.adminID = adminId;
-        this.AD_ADMINID.setText(adminId + "13");
-
-
-    }
-
-    public void setFullName(String fullName) {
-       this.fullname = fullName;
-
-    }
     // End of variables declaration//GEN-END:variables
 }
