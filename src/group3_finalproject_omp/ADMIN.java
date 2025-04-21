@@ -56,7 +56,7 @@ public class ADMIN extends javax.swing.JFrame {
         LIBRARIAN_ACCOUNT_PANEL.setVisible(false);
         STUDENT_ACCOUNT_PANEL.setVisible(false);
 
-        String[] columns = {"ID", "Username", "Student Number", "Email", "Phone Number", "Home Address", "Year and Section"};
+        String[] columns = {"ID", "Username", "FullName" ,"Student Number", "Email", "Phone Number", "Home Address", "Year and Section", "Password"};
         model = new DefaultTableModel(columns, 0);
         ST_TABLE.setModel(model);
 
@@ -73,7 +73,7 @@ public class ADMIN extends javax.swing.JFrame {
 
         LoadLibrarian();
 
-        String[] columns2 = {"Admin ID", "Full Name", "Key Password", "Education Attainment", "Phone Number", "Email Address", "Home Address", "Admin Number"};
+        String[] columns2 = {"Admin ID", "Full Name", "Key Password", "Education Attainment", "Phone Number", "Email Address", "Home Address", "Admin Number", "Password"};
         model2 = new DefaultTableModel(columns2, 0);
         AD_TABLE.setModel(model2);
 
@@ -861,6 +861,11 @@ public class ADMIN extends javax.swing.JFrame {
         ST_EDIT.setRequestFocusEnabled(false);
         ST_EDIT.setRolloverEnabled(false);
         ST_EDIT.setVerifyInputWhenFocusTarget(false);
+        ST_EDIT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ST_EDITActionPerformed(evt);
+            }
+        });
         STUDENT_ACCOUNT_PANEL.add(ST_EDIT, new org.netbeans.lib.awtextra.AbsoluteConstraints(451, 618, 120, 30));
 
         ST_CLEAR.setBackground(new java.awt.Color(255, 243, 148));
@@ -890,6 +895,11 @@ public class ADMIN extends javax.swing.JFrame {
         ST_REMOVE.setRequestFocusEnabled(false);
         ST_REMOVE.setRolloverEnabled(false);
         ST_REMOVE.setVerifyInputWhenFocusTarget(false);
+        ST_REMOVE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ST_REMOVEActionPerformed(evt);
+            }
+        });
         STUDENT_ACCOUNT_PANEL.add(ST_REMOVE, new org.netbeans.lib.awtextra.AbsoluteConstraints(771, 618, 120, 30));
 
         ST_BACKGROUND_LAYOUT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ADM_MANAGEUSER/ADM_STUDENT_ACC_FRAME.png"))); // NOI18N
@@ -1009,6 +1019,11 @@ public class ADMIN extends javax.swing.JFrame {
         LB_EDIT.setRequestFocusEnabled(false);
         LB_EDIT.setRolloverEnabled(false);
         LB_EDIT.setVerifyInputWhenFocusTarget(false);
+        LB_EDIT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LB_EDITActionPerformed(evt);
+            }
+        });
         LIBRARIAN_ACCOUNT_PANEL.add(LB_EDIT, new org.netbeans.lib.awtextra.AbsoluteConstraints(451, 618, 120, 30));
 
         LB_CLEAR.setBackground(new java.awt.Color(255, 243, 148));
@@ -1111,6 +1126,11 @@ public class ADMIN extends javax.swing.JFrame {
         AD_EDIT.setRequestFocusEnabled(false);
         AD_EDIT.setRolloverEnabled(false);
         AD_EDIT.setVerifyInputWhenFocusTarget(false);
+        AD_EDIT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AD_EDITActionPerformed(evt);
+            }
+        });
         ADMIN_ACCOUNT_PANEL.add(AD_EDIT, new org.netbeans.lib.awtextra.AbsoluteConstraints(449, 609, 120, 30));
 
         AD_CLEAR.setBackground(new java.awt.Color(255, 243, 148));
@@ -1762,6 +1782,211 @@ public class ADMIN extends javax.swing.JFrame {
        
     }//GEN-LAST:event_AD_REMOVEActionPerformed
 
+    // This will edit the data of the student
+    private void ST_EDITActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ST_EDITActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = ST_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+
+            // Retrieve current student details from the table
+            String studentID = model.getValueAt(selectedRow, 0).toString();
+            String username = model.getValueAt(selectedRow, 1).toString();
+            String fullName = model.getValueAt(selectedRow, 2).toString();
+            String studentNumber = model.getValueAt(selectedRow, 3).toString();
+            String emailAddress = model.getValueAt(selectedRow, 4).toString();
+            String phoneNumber = model.getValueAt(selectedRow, 5).toString();
+            String homeAddress = model.getValueAt(selectedRow, 6).toString();
+            String yearAndSection = model.getValueAt(selectedRow, 7).toString();
+            String password = model.getValueAt(selectedRow, 8).toString();
+
+
+
+            // Create input fields
+            JTextField usernameField = new JTextField(username);
+            JTextField fullNameField = new JTextField(fullName);
+            JTextField studentNumberField = new JTextField(studentNumber);
+            JTextField emailAddressField = new JTextField(emailAddress);
+            JTextField phoneNumberField = new JTextField(phoneNumber);
+            JTextField homeAddressField = new JTextField(homeAddress);
+            JTextField yearAndSectionField = new JTextField(yearAndSection);
+            JTextField passwordField = new JTextField(password);
+
+
+            // Create a panel to hold the input fields
+            JPanel panel = new JPanel(new GridLayout(8, 2, 5, 5));
+            panel.add(new JLabel("Username:"));
+            panel.add(usernameField);
+            panel.add(new JLabel("Full Name:"));
+            panel.add(fullNameField);
+            panel.add(new JLabel("Student Number:"));
+            panel.add(studentNumberField);
+            panel.add(new JLabel("Email Address:"));
+            panel.add(emailAddressField);
+            panel.add(new JLabel("Phone Number:"));
+            panel.add(phoneNumberField);
+            panel.add(new JLabel("Home Address:"));
+            panel.add(homeAddressField);
+            panel.add(new JLabel("Year and Section:"));
+            panel.add(yearAndSectionField);
+            panel.add(new JLabel("Password:"));
+            panel.add(passwordField);
+
+
+            // Show the dialog
+            int result = JOptionPane.showConfirmDialog(
+                    this, panel, "Edit Student Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result == JOptionPane.OK_OPTION) {
+                // Retrieve updated values
+                String updatedFullName = fullNameField.getText();
+                String updatedStudentNumber = studentNumberField.getText();
+                String updatedEmailAddress = emailAddressField.getText();
+                String updatedPhoneNumber = phoneNumberField.getText();
+                String updatedHomeAddress = homeAddressField.getText();
+                String updatedYearAndSection = yearAndSectionField.getText();
+                String updatedPassword = passwordField.getText();
+                String updatedUsername = usernameField.getText();
+
+
+                // Create a map for the updated data
+                Map<String, String> studentData = new HashMap<>();
+                studentData.put("full_name", updatedFullName);
+                studentData.put("student_number", updatedStudentNumber);
+                studentData.put("email_address", updatedEmailAddress);
+                studentData.put("phone_number", updatedPhoneNumber);
+                studentData.put("home_address", updatedHomeAddress);
+                studentData.put("year_and_section", updatedYearAndSection);
+                studentData.put("password", updatedPassword);
+                studentData.put("username", updatedUsername);
+
+                // Update the student in the database
+
+                StudentDatabase.getInstance().updateStudent(studentID, studentData);
+
+                // Reload the student table
+                LoadStudent();
+
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a student to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_ST_EDITActionPerformed
+
+    // This will edit the librarian
+    private void LB_EDITActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LB_EDITActionPerformed
+        // TODO add your handling code here:
+
+
+    }//GEN-LAST:event_LB_EDITActionPerformed
+
+    // This will delete the student
+    private void ST_REMOVEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ST_REMOVEActionPerformed
+
+        int selectedRow = ST_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            String studentID = model.getValueAt(selectedRow, 0).toString();
+            // Remove the selected student from the database
+            StudentDatabase.getInstance().deleteStudent(studentID);
+            LoadStudent();
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a student to remove.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ST_REMOVEActionPerformed
+
+     // This will edit the data of the admin
+     private void AD_EDITActionPerformed(java.awt.event.ActionEvent evt) {                                        
+         // Get the selected row
+         int selectedRow = AD_TABLE.getSelectedRow();
+
+         if (selectedRow != -1) {
+             // Retrieve current admin details from the table
+             String adminID = model2.getValueAt(selectedRow, 0).toString();
+             String fullName = model2.getValueAt(selectedRow, 1).toString();
+             String keyPassword = model2.getValueAt(selectedRow, 2).toString();
+             String educationAttainment = model2.getValueAt(selectedRow, 3).toString();
+             String phoneNumber = model2.getValueAt(selectedRow, 4).toString();
+             String emailAddress = model2.getValueAt(selectedRow, 5).toString();
+             String homeAddress = model2.getValueAt(selectedRow, 6).toString();
+             String adminNumber = model2.getValueAt(selectedRow, 7).toString();
+             String password = model2.getValueAt(selectedRow, 8).toString();
+
+             // Create input fields
+             JTextField adminIDField = new JTextField(adminID);
+             JTextField fullNameField = new JTextField(fullName);
+             JTextField keyPasswordField = new JTextField(keyPassword);
+             JTextField educationAttainmentField = new JTextField(educationAttainment);
+             JTextField phoneNumberField = new JTextField(phoneNumber);
+             JTextField emailAddressField = new JTextField(emailAddress);
+             JTextField homeAddressField = new JTextField(homeAddress);
+             JTextField adminNumberField = new JTextField(adminNumber);
+             JTextField passwordField = new JTextField(password);
+
+             // Create a panel to hold the input fields
+             JPanel panel = new JPanel(new GridLayout(9, 2, 5, 5)); // Adjusted to 9 rows and 2 columns
+             panel.add(new JLabel("Admin ID:"));
+             panel.add(adminIDField);
+             panel.add(new JLabel("Full Name:"));
+             panel.add(fullNameField);
+             panel.add(new JLabel("Key Password:"));
+             panel.add(keyPasswordField);
+             panel.add(new JLabel("Education Attainment:"));
+             panel.add(educationAttainmentField);
+             panel.add(new JLabel("Phone Number:"));
+             panel.add(phoneNumberField);
+             panel.add(new JLabel("Email Address:"));
+             panel.add(emailAddressField);
+             panel.add(new JLabel("Home Address:"));
+             panel.add(homeAddressField);
+             panel.add(new JLabel("Admin Number:"));
+             panel.add(adminNumberField);
+             panel.add(new JLabel("Password:"));
+             panel.add(passwordField);
+
+             // Show the dialog
+             int result = JOptionPane.showConfirmDialog(
+                     this, panel, "Edit Admin Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+             );
+
+             if (result == JOptionPane.OK_OPTION) {
+                 // Retrieve updated values
+                 String updatedAdminID = adminIDField.getText();
+                 String updatedFullName = fullNameField.getText();
+                 String updatedKeyPassword = keyPasswordField.getText();
+                 String updatedEducationAttainment = educationAttainmentField.getText();
+                 String updatedPhoneNumber = phoneNumberField.getText();
+                 String updatedEmailAddress = emailAddressField.getText();
+                 String updatedHomeAddress = homeAddressField.getText();
+                 String updatedAdminNumber = adminNumberField.getText();
+                    String updatedPassword = passwordField.getText();
+
+                 // Create a map for the updated data
+                 Map<String, String> adminData = new HashMap<>();
+                 adminData.put("admin_id", updatedAdminID);
+                 adminData.put("full_name", updatedFullName);
+                 adminData.put("key_pass", updatedKeyPassword);
+                 adminData.put("education_attainment", updatedEducationAttainment);
+                 adminData.put("phone_number", updatedPhoneNumber);
+                 adminData.put("email_address", updatedEmailAddress);
+                 adminData.put("home_address", updatedHomeAddress);
+                 adminData.put("admin_number", updatedAdminNumber);
+                    adminData.put("password", updatedPassword);
+
+                 // Update the admin in the database
+                AdminDatabase.getInstance().updateAdmin(adminID, adminData);
+
+                 // Reload the admin table
+                 LoadAdmin();
+             }
+         } else {
+             JOptionPane.showMessageDialog(this, "Please select an admin to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+         }
+     }                                                                              
+
 
 
     // Load the student data into the table
@@ -1774,11 +1999,14 @@ public class ADMIN extends javax.swing.JFrame {
                 model.addRow(new Object[]{
                         student.getUserid(),
                         student.getUsername(),
+                        student.getFullname(),
                         student.getStudentNumber(),
                         student.getEmailAddress(),
                         student.getPhoneNumber(),
                         student.getHomeAddress(),
-                        student.getYearAndSection()
+                        student.getYearAndSection(),
+                        student.getPassword()
+
                 });
             }
         } else {
@@ -1822,7 +2050,8 @@ public class ADMIN extends javax.swing.JFrame {
                          admin.getPhoneNumber(),
                          admin.getEmailAddress(),
                          admin.getHomeAddress(),
-                         admin.getAdminNumber()
+                         admin.getAdminNumber(),
+                         admin.getPassword(),
                  });
              }
          } else {

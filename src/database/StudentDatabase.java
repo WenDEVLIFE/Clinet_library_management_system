@@ -79,7 +79,7 @@ public class StudentDatabase {
                 String fullName = resultSet.getString("full_name");
 
                 StudentModel student = new StudentModel(
-                        userid, username, password, fullName, yearAndSection,
+                        userid, username, fullName, password, yearAndSection,
                         homeAddress, emailAddress, studentNumber, phoneNumber
                 );
                 students.add(student);
@@ -119,6 +119,40 @@ public class StudentDatabase {
         } catch (SQLException e) {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error deleting student: " + e.getMessage());
+        }
+    }
+
+    public void updateStudent(String studentID, Map<String, String> studentData) {
+        String query = "UPDATE student SET username = ?, password = ?, full_name = ?, year_and_section = ?, home_address = ?, email_address = ?, student_number = ?, phone_number = ? WHERE user_id = ?";
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, studentData.get("username"));
+            preparedStatement.setString(2, studentData.get("password"));
+            preparedStatement.setString(3, studentData.get("full_name"));
+            preparedStatement.setString(4, studentData.get("year_and_section"));
+            preparedStatement.setString(5, studentData.get("home_address"));
+            preparedStatement.setString(6, studentData.get("email_address"));
+            preparedStatement.setString(7, studentData.get("student_number"));
+            preparedStatement.setString(8, studentData.get("phone_number"));
+            preparedStatement.setString(9, studentID);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Student updated successfully!");
+                JOptionPane.showMessageDialog(null, "Student updated successfully!");
+            } else {
+                System.out.println("Failed to update the student.");
+            }
+
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error updating student: " + e.getMessage());
         }
     }
 }
