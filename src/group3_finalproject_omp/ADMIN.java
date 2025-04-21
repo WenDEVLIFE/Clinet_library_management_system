@@ -10,6 +10,7 @@ import database.BookDatabase;
 import database.LibrarianDatabase;
 import database.StudentDatabase;
 import model.AdminModel;
+import model.BookModel;
 import model.LibraryModel;
 import model.StudentModel;
 
@@ -31,10 +32,12 @@ public class ADMIN extends javax.swing.JFrame {
     DefaultTableModel model;
     DefaultTableModel model1;
     DefaultTableModel model2;
+    DefaultTableModel model3;
 
     List<StudentModel> studentList;
     List<LibraryModel> librarianList;
     List<AdminModel> adminModelList;
+    List<BookModel> bookList;
     /**
      * Creates new form ADMIN
      */
@@ -77,6 +80,14 @@ public class ADMIN extends javax.swing.JFrame {
         AD_TABLE.setModel(model2);
 
         LoadAdmin();
+
+
+        String [] columns3 = {"Book ID", "Title", "Author", "Genre", "Date Published", "ISBN", "Status"};
+        model3 = new DefaultTableModel(columns3, 0);
+        AB_TABLE.setModel(model3);
+
+        LoadBook();
+
 
 
     }
@@ -434,6 +445,11 @@ public class ADMIN extends javax.swing.JFrame {
         AB_CLEAR.setRequestFocusEnabled(false);
         AB_CLEAR.setRolloverEnabled(false);
         AB_CLEAR.setVerifyInputWhenFocusTarget(false);
+        AB_CLEAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AB_CLEARActionPerformed(evt);
+            }
+        });
         ADD_BOOK_PANEL.add(AB_CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(787, 541, 131, 30));
 
         AB_DELETE.setBackground(new java.awt.Color(110, 15, 7));
@@ -1492,6 +1508,7 @@ public class ADMIN extends javax.swing.JFrame {
             AD_EDUCATTAIN.setText("");
             AD_KEYPASS.setText("");
             AD_ADMINNUM.setText("");
+            LoadAdmin();
 
         }
     }//GEN-LAST:event_AD_CREATEActionPerformed
@@ -1567,10 +1584,22 @@ public class ADMIN extends javax.swing.JFrame {
             AB_ISBN.setText("");
             AB_BOOK_GENRE.setText("");
             AB_DATE_PUB.setText("");
+            LoadBook();
 
         }
 
     }//GEN-LAST:event_AB_ADDActionPerformed
+
+    // This will clear the add books
+    private void AB_CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AB_CLEARActionPerformed
+        // TODO add your handling code here:
+         AB_BOOK_TITLE.setText("");
+         AB_BOOK_AUTHOR.setText("");
+            AB_ISBN.setText("");
+            AB_BOOK_GENRE.setText("");
+            AB_DATE_PUB.setText("");
+
+    }//GEN-LAST:event_AB_CLEARActionPerformed
 
 
 
@@ -1641,7 +1670,26 @@ public class ADMIN extends javax.swing.JFrame {
 
      }
 
+    void LoadBook() {
+        model3.setRowCount(0); // Clear existing rows
+        bookList = BookDatabase.getInstance().getBooks();
 
+        if (bookList != null) {
+            for (BookModel book : bookList) {
+                model3.addRow(new Object[]{
+                        book.getBook_id(),
+                        book.getBook_title(),
+                        book.getBook_author(),
+                        book.getBook_genre(),
+                        book.getDate_published(),
+                        book.getIsbn(),
+                        book.getStatus(),
+                });
+            }
+        } else {
+            System.out.println("No books found.");
+        }
+    }
 
     /**
      * @param args the command line arguments
