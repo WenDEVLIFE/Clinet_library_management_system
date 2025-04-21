@@ -92,4 +92,29 @@ public class LibrarianDatabase {
         return librarianList;
 
     }
+
+    public void deleteLibrarian(String librarianID) {
+
+        String query = "DELETE FROM librarian WHERE librarian_id = ?";
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, librarianID);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Librarian deleted successfully!");
+
+                // Optionally, you can show a success message to the user
+                JOptionPane.showMessageDialog(null, "Librarian deleted successfully!");
+            } else {
+                System.out.println("Failed to delete the librarian.");
+            }
+
+        } catch (Exception e) {
+             e.printStackTrace();
+        }
+    }
 }

@@ -65,7 +65,7 @@ public class ADMIN extends javax.swing.JFrame {
 
         LoadStudent();
 
-        String[] columns1 = {"Librarian ID", "Full Name", "Birthdate", "Home Address", "GWA", "Phone Number", "Email Address"};
+        String[] columns1 = {"Librarian ID", "Full Name", "Password","Birthdate", "Home Address", "GWA", "Phone Number", "Email Address"};
         model1 = new DefaultTableModel(columns1, 0);
         LB_TABLE.setModel(model1);
 // Disable auto-resizing to allow horizontal scrolling
@@ -1053,6 +1053,11 @@ public class ADMIN extends javax.swing.JFrame {
         LB_REMOVE.setRequestFocusEnabled(false);
         LB_REMOVE.setRolloverEnabled(false);
         LB_REMOVE.setVerifyInputWhenFocusTarget(false);
+        LB_REMOVE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LB_REMOVEActionPerformed(evt);
+            }
+        });
         LIBRARIAN_ACCOUNT_PANEL.add(LB_REMOVE, new org.netbeans.lib.awtextra.AbsoluteConstraints(771, 618, 120, 30));
 
         LB_BACKGROUND_LAYOUT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ADM_MANAGEUSER/ADM_LIBRARIAN_ACC_FARME.png"))); // NOI18N
@@ -1898,6 +1903,22 @@ public class ADMIN extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_ST_REMOVEActionPerformed
 
+    // This will remove the librarian
+    private void LB_REMOVEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LB_REMOVEActionPerformed
+        // TODO add your handling code here:
+
+        int selectedRow = LB_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            String librarianID = model1.getValueAt(selectedRow, 0).toString();
+            // Remove the selected librarian from the database
+            LibrarianDatabase.getInstance().deleteLibrarian(librarianID);
+            LoadLibrarian();
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a librarian to remove.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_LB_REMOVEActionPerformed
+
      // This will edit the data of the admin
      private void AD_EDITActionPerformed(java.awt.event.ActionEvent evt) {                                        
          // Get the selected row
@@ -2023,11 +2044,12 @@ public class ADMIN extends javax.swing.JFrame {
                 model1.addRow(new Object[]{
                         librarian.getLibrarianId(),
                         librarian.getFullName(),
-                        librarian.getEmailAddress(),
-                        librarian.getPhoneNumber(),
-                        librarian.getHomeAddress(),
+                        librarian.getPassword(),
                         librarian.getBirthdate(),
-                        librarian.getGwa()
+                        librarian.getHomeAddress(),
+                        librarian.getGwa(),
+                        librarian.getPhoneNumber(),
+                        librarian.getEmailAddress(),
                 });
             }
         } else {
