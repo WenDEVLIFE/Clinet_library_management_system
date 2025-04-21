@@ -5,6 +5,7 @@
  */
 package group3_finalproject_omp;
 
+import database.AdminDatabase;
 import database.LibrarianDatabase;
 import database.StudentDatabase;
 import model.LibraryModel;
@@ -1019,6 +1020,11 @@ public class ADMIN extends javax.swing.JFrame {
         AD_CREATE.setRequestFocusEnabled(false);
         AD_CREATE.setRolloverEnabled(false);
         AD_CREATE.setVerifyInputWhenFocusTarget(false);
+        AD_CREATE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AD_CREATEActionPerformed(evt);
+            }
+        });
         ADMIN_ACCOUNT_PANEL.add(AD_CREATE, new org.netbeans.lib.awtextra.AbsoluteConstraints(289, 609, 120, 30));
 
         AD_EDIT.setBackground(new java.awt.Color(255, 243, 148));
@@ -1414,6 +1420,50 @@ public class ADMIN extends javax.swing.JFrame {
 
         // TODO add your handling code here:
     }//GEN-LAST:event_LB_CREATEActionPerformed
+
+    private void AD_CREATEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AD_CREATEActionPerformed
+        // TODO add your handling code here:
+        String adminName = AD_FULLNAME.getText();
+        String adminID = AD_ADMINID.getText();
+        String adminEmail = AD_EMAILADD.getText();
+        String adminHome = AD_HOMEADD.getText();
+        String adminPass = AD_PASSWORD.getText();
+        String adminPhonenum = AD_PHONENUM.getText();
+        String adminConfirmPass = AD_CONFIRMPASS.getText();
+        String adminEducAttain = AD_EDUCATTAIN.getText();
+        String adminKeyPass = AD_KEYPASS.getText();
+        String adminAdminNum = AD_ADMINNUM.getText();
+        if (adminName.isEmpty() || adminID.isEmpty()|| adminEmail.isEmpty() || adminHome.isEmpty() || adminPass.isEmpty() || adminConfirmPass.isEmpty() || adminEducAttain.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (!adminPass.equals(adminConfirmPass)) {
+            JOptionPane.showMessageDialog(this, "Passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+
+            Map<String, String> adminData = new HashMap<>();
+            adminData.put("full_name", adminName);
+            adminData.put("admin_id", adminID);
+            adminData.put("email_address", adminEmail);
+            adminData.put("phone_number", adminPhonenum);
+            adminData.put("home_address", adminHome);
+            adminData.put("password", adminPass);
+            adminData.put("education_attainment", adminEducAttain);
+            adminData.put("key_password", adminKeyPass);
+            adminData.put("admin_number", adminAdminNum);
+
+            AdminDatabase.getInstance().insertAdmin(adminData);
+            AD_FULLNAME.setText("");
+            AD_ADMINID.setText("");
+            AD_PHONENUM.setText("");
+            AD_EMAILADD.setText("");
+            AD_HOMEADD.setText("");
+            AD_PASSWORD.setText("");
+            AD_CONFIRMPASS.setText("");
+            AD_EDUCATTAIN.setText("");
+            AD_KEYPASS.setText("");
+            AD_ADMINNUM.setText("");
+
+        }
+    }//GEN-LAST:event_AD_CREATEActionPerformed
 
     // Load the student data into the table
     void LoadStudent() {
