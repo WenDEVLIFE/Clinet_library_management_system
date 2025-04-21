@@ -95,4 +95,30 @@ public class StudentDatabase {
 
         return students;
     }
+
+    public void deleteStudent(String studentID) {
+
+        String query = "DELETE FROM student WHERE user_id = ?";
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, studentID);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Student deleted successfully!");
+                JOptionPane.showMessageDialog(null, "Student deleted successfully!");
+            } else {
+                System.out.println("Failed to delete the student.");
+            }
+
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error deleting student: " + e.getMessage());
+        }
+    }
 }
