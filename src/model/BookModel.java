@@ -1,13 +1,13 @@
 package model;
 
 public class BookModel {
-    final String book_id;
-    final String book_title;
-    final String book_author;
-    final String book_genre;
-    final String date_published;
-    final String isbn;
-    final String status;
+     String book_id;
+     String book_title;
+     String book_author;
+     String book_genre;
+     String date_published;
+     String isbn;
+     String status;
 
     public BookModel(String book_id, String book_title, String book_author, String book_genre, String date_published, String isbn, String status) {
         this.book_id = book_id;
