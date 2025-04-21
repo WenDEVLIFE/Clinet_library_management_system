@@ -82,8 +82,6 @@ public class LoginDatabase {
                 // Create admin dashboard and pass admin information
                 ADMIN dashboard = new ADMIN();
                 // Assuming ADMIN class has methods to set these values
-                dashboard.setAdminId(adminId);
-                dashboard.setFullName(fullName);
 
                 dashboard.setVisible(true);
                 main.dispose();

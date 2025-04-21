@@ -5,8 +5,12 @@
  */
 package group3_finalproject_omp;
 
+import database.StudentDatabase;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -1287,14 +1291,42 @@ public class ADMIN extends javax.swing.JFrame {
         // TODO add your handling code here:
         String studentName = ST_FULLNAME.getText();
         String studentID = ST_STNUMBER.getText();
-        String studentNum = ST_PHONENUM.getText();
         String studentEmail = ST_EMAILADD.getText();
         String studentHome = ST_HOMEADD.getText();
         String studentPass = ST_PASSWORD.getText();
+        String studentPhonenum = ST_PHONENUM.getText();
+        String studentUsername = ST_USERNAME.getText();
         String studentConfirmPass = ST_CONFIRMPASS.getText();
         String yearLevel = ST_YEARSEC.getText();
 
-        if
+        if (studentName.isEmpty() || studentID.isEmpty()|| studentEmail.isEmpty() || studentHome.isEmpty() || studentPass.isEmpty() || studentConfirmPass.isEmpty() || yearLevel.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (!studentPass.equals(studentConfirmPass)) {
+            JOptionPane.showMessageDialog(this, "Passwords do not match.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+
+            Map<String, String> studentData = new HashMap<>();
+            studentData.put("full_name", studentName);
+            studentData.put("student_number", studentID);
+            studentData.put("email_address", studentEmail);
+            studentData.put("username", studentUsername);
+            studentData.put("phone_number", studentPhonenum);
+            studentData.put("home_address", studentHome);
+            studentData.put("password", studentPass);
+            studentData.put("year_and_section", yearLevel);
+
+            StudentDatabase.getInstance().insertStudent(studentData);
+            ST_FULLNAME.setText("");
+            ST_STNUMBER.setText("");
+            ST_PHONENUM.setText("");
+            ST_EMAILADD.setText("");
+            ST_HOMEADD.setText("");
+            ST_PASSWORD.setText("");
+            ST_CONFIRMPASS.setText("");
+            ST_YEARSEC.setText("");
+
+
+        }
 
 
     }//GEN-LAST:event_ST_CREATEActionPerformed
