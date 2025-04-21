@@ -410,13 +410,12 @@ public class MAIN extends javax.swing.JFrame {
         String librarianID = jL_LIBRARIAN_ID.getText();
         String librarianpassword = new String(jL_PASSWORD.getPassword());
 
-        if(librarianID.equals("L-616") && librarianpassword.equals("librarian")) {
-            JOptionPane.showMessageDialog(this, "Login successful!");
-            LIBRARIAN dashbaord = new LIBRARIAN();
-            dashbaord.setVisible(true);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, "Invalid Librarian ID and Password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+         if (librarianID.isEmpty() || librarianpassword.isEmpty()) {
+             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+         }
+        else {
+
+        LoginDatabase.getInstance().loginLibrarian(librarianID,     librarianpassword, this);
         }
     }//GEN-LAST:event_jL_LOGINActionPerformed
 

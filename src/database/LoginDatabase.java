@@ -101,7 +101,7 @@ public class LoginDatabase {
         }
     }
         public void loginLibrarian(String username, String password, MAIN main) {
-            String query = "SELECT * FROM librarian WHERE username = ? AND password = ?";
+            String query = "SELECT * FROM librarian WHERE librarian_id = ? AND password = ?";
 
             try {
                 Connection connection = LibrarySQL.getConnection();
