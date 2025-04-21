@@ -5,10 +5,7 @@
  */
 package group3_finalproject_omp;
 
-import database.AdminDatabase;
-import database.BookDatabase;
-import database.LibrarianDatabase;
-import database.StudentDatabase;
+import database.*;
 import model.AdminModel;
 import model.BookModel;
 import model.LibraryModel;
@@ -662,6 +659,11 @@ public class ADMIN extends javax.swing.JFrame {
         IS_ADD.setRequestFocusEnabled(false);
         IS_ADD.setRolloverEnabled(false);
         IS_ADD.setVerifyInputWhenFocusTarget(false);
+        IS_ADD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IS_ADDActionPerformed(evt);
+            }
+        });
         ISSUE_BOOK_PANEL.add(IS_ADD, new org.netbeans.lib.awtextra.AbsoluteConstraints(754, 461, 131, 30));
 
         IS_EDIT.setBackground(new java.awt.Color(255, 166, 166));
@@ -686,6 +688,11 @@ public class ADMIN extends javax.swing.JFrame {
         IS_CLEAR.setRequestFocusEnabled(false);
         IS_CLEAR.setRolloverEnabled(false);
         IS_CLEAR.setVerifyInputWhenFocusTarget(false);
+        IS_CLEAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IS_CLEARActionPerformed(evt);
+            }
+        });
         ISSUE_BOOK_PANEL.add(IS_CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(754, 549, 131, 30));
 
         IS_DELETE.setBackground(new java.awt.Color(110, 15, 7));
@@ -1600,6 +1607,59 @@ public class ADMIN extends javax.swing.JFrame {
             AB_DATE_PUB.setText("");
 
     }//GEN-LAST:event_AB_CLEARActionPerformed
+
+    // This will add the issue books
+    private void IS_ADDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IS_ADDActionPerformed
+        // TODO add your handling code here:
+        String isbn = IB_ISBN.getText();
+        String name = IB_NAME.getText();
+        String phone = IB_PHONENUMBER.getText();
+        String email = IB_EMAILADD.getText();
+        String issueID = IB_ISSUEID.getText();
+        String issueDate = IB_ISSUEDATE.getText();
+        String returnDate = IB_RETURNDATE.getText();
+        String status = IB_COMBO.getSelectedItem().toString();
+
+         if  (isbn.isEmpty() || name.isEmpty() || phone.isEmpty() || email.isEmpty() || issueID.isEmpty() || issueDate.isEmpty() || returnDate.isEmpty()) {
+             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+         }
+
+        else {
+             Map<String, String> issueData = new HashMap<>();
+             issueData.put("isbn", isbn);
+             issueData.put("name", name);
+             issueData.put("phone_number", phone);
+             issueData.put("email_address", email);
+             issueData.put("issue_id", issueID);
+             issueData.put("issue_date", issueDate);
+             issueData.put("return_date", returnDate);
+             issueData.put("status", status);
+
+             IssueBookDatabase.getInstance().insertIssueBook(issueData);
+             IB_ISBN.setText("");
+             IB_NAME.setText("");
+             IB_PHONENUMBER.setText("");
+             IB_EMAILADD.setText("");
+             IB_ISSUEID.setText("");
+             IB_ISSUEDATE.setText("");
+             IB_RETURNDATE.setText("");
+
+         }
+
+
+    }//GEN-LAST:event_IS_ADDActionPerformed
+
+    // This will clear the issue books
+    private void IS_CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IS_CLEARActionPerformed
+        // TODO add your handling code here:
+        IB_ISBN.setText("");
+        IB_NAME.setText("");
+        IB_PHONENUMBER.setText("");
+        IB_EMAILADD.setText("");
+        IB_ISSUEID.setText("");
+        IB_ISSUEDATE.setText("");
+        IB_RETURNDATE.setText("");
+    }//GEN-LAST:event_IS_CLEARActionPerformed
 
 
 
