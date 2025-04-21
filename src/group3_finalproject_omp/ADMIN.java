@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
  */
 public class ADMIN extends javax.swing.JFrame {
 
+    String fullname;
+    String adminID;
     /**
      * Creates new form ADMIN
      */
@@ -1433,5 +1435,17 @@ public class ADMIN extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+
+    public void setAdminId(String adminId) {
+         this.adminID = adminId;
+        this.AD_ADMINID.setText(adminId + "13");
+
+
+    }
+
+    public void setFullName(String fullName) {
+       this.fullname = fullName;
+
+    }
     // End of variables declaration//GEN-END:variables
 }

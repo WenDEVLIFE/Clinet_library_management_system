@@ -44,9 +44,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_NUMBER_RETURNED_BOOK = new javax.swing.JLabel();
         LIB_NUMBER_ISSUED_BOOK = new javax.swing.JLabel();
         LIB_NUMBER_AVAIL_BOOK = new javax.swing.JLabel();
-        LIB_DATE_TIME = new javax.swing.JLabel();
         LIB_BOOKLIST = new javax.swing.JLabel();
+        LIB_DATE_TIME = new javax.swing.JLabel();
         LIB_BOOKS = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         LIB_BACKGROUND_LAYOUT = new javax.swing.JLabel();
         jP_LIB_ADDBOOK = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -143,15 +145,30 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_NUMBER_AVAIL_BOOK.setText("0");
         jP_LIB_DASHBOARD.add(LIB_NUMBER_AVAIL_BOOK, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 530, -1, -1));
 
+        LIB_BOOKLIST.setIcon(new javax.swing.ImageIcon(getClass().getResource("/LIB/LIB_BOOK_LIST.png"))); // NOI18N
+        jP_LIB_DASHBOARD.add(LIB_BOOKLIST, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 140, -1, -1));
+
         LIB_DATE_TIME.setIcon(new javax.swing.ImageIcon(getClass().getResource("/LIB/LIB_DATE_TIME.png"))); // NOI18N
         jP_LIB_DASHBOARD.add(LIB_DATE_TIME, new org.netbeans.lib.awtextra.AbsoluteConstraints(582, 163, -1, -1));
-
-        LIB_BOOKLIST.setIcon(new javax.swing.ImageIcon(getClass().getResource("/LIB/LIB_BOOK_LIST.png"))); // NOI18N
-        jP_LIB_DASHBOARD.add(LIB_BOOKLIST, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 164, -1, -1));
 
         LIB_BOOKS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/LIB/LIB_BOOKS.png"))); // NOI18N
         LIB_BOOKS.setText("jLabel3");
         jP_LIB_DASHBOARD.add(LIB_BOOKS, new org.netbeans.lib.awtextra.AbsoluteConstraints(46, 430, -1, -1));
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane5.setViewportView(jTable2);
+
+        jP_LIB_DASHBOARD.add(jScrollPane5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 160, 520, 210));
 
         LIB_BACKGROUND_LAYOUT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/LIB/LIB_DASHBOARD_FRAME.png"))); // NOI18N
         jP_LIB_DASHBOARD.add(LIB_BACKGROUND_LAYOUT, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
@@ -173,13 +190,10 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_ADD_TABLE.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(202, 231, 255)));
         LIB_ADD_TABLE.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
         LIB_ADD_TABLE.setFocusable(false);
@@ -195,6 +209,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_BOOK_TITLE.setFont(new java.awt.Font("Candara Light", 1, 12)); // NOI18N
         LIB_BOOK_TITLE.setHorizontalAlignment(javax.swing.JTextField.LEFT);
         LIB_BOOK_TITLE.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(55, 103, 166)));
+        LIB_BOOK_TITLE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIB_BOOK_TITLEActionPerformed(evt);
+            }
+        });
         jP_LIB_ADDBOOK.add(LIB_BOOK_TITLE, new org.netbeans.lib.awtextra.AbsoluteConstraints(306, 409, 245, 30));
 
         LIB_BOOK_AUTHOR.setBackground(new java.awt.Color(248, 243, 232));
@@ -693,6 +712,10 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_ACCOUNT.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ACCOUNT_ACTIVE.png")));
     }//GEN-LAST:event_LIB_ACCOUNTMouseClicked
 
+    private void LIB_BOOK_TITLEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_BOOK_TITLEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LIB_BOOK_TITLEActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -796,5 +819,7 @@ public class LIBRARIAN extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JTable jTable2;
     // End of variables declaration//GEN-END:variables
 }

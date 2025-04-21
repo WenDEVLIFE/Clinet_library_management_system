@@ -12,6 +12,8 @@ public class LibrarySQL {
     // Student queries
     public static String checkStudent = "SELECT * FROM student WHERE fullname = ?";
     public static String studentLogin = "SELECT * FROM student WHERE username = ? AND password = ?";
+    public static String adminLogin = "SELECT * FROM admin WHERE username = ? AND password = ?";
+    public static String libraryLogin = "SELECT * FROM librarian WHERE username = ? AND password = ?";
 
     // Book queries
     public static String getAllBooks = "SELECT * FROM books";
@@ -41,24 +43,6 @@ public class LibrarySQL {
             System.out.println("Connection to SQLite has been established.");
         } catch (SQLException e) {
             System.out.println("Connection error: " + e.getMessage());
-        }
-    }
-
-    // Example method to validate student login
-    public static boolean validateStudentLogin(String username, String password) {
-        try (
-                Connection conn = getConnection();
-                PreparedStatement stmt = conn.prepareStatement(studentLogin)
-        ) {
-            stmt.setString(1, username);
-            stmt.setString(2, password);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                return rs.next(); // Returns true if a matching record is found
-            }
-        } catch (SQLException e) {
-            System.out.println("Login validation error: " + e.getMessage());
-            return false;
         }
     }
 }

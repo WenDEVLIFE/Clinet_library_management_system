@@ -4,6 +4,8 @@
  * and open the template in the editor.
  */
 package group3_finalproject_omp;
+import database.LoginDatabase;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
@@ -396,14 +398,12 @@ public class MAIN extends javax.swing.JFrame {
         String adminpassword = new String(jA_PASSWORD.getPassword());
         String keycard = jA_KEYCARD.getText();
 
-        if(adminID.equals("G3-2025") && adminpassword.equals("admin") && keycard.equals("12345")) {
-            JOptionPane.showMessageDialog(this, "Login successful!");
-            ADMIN dashbaord = new ADMIN();
-            dashbaord.setVisible(true);
-            this.dispose();
+      if (adminID.isEmpty() || adminpassword.isEmpty() || keycard.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Login Failed", JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "Invalid Admin ID, Password, and Keycard Number.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            LoginDatabase.getInstance().loginAdmin(adminID, adminpassword, keycard, this);
         }
+
     }//GEN-LAST:event_jA_LOGINActionPerformed
 
     private void jL_LOGINActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jL_LOGINActionPerformed
@@ -424,13 +424,10 @@ public class MAIN extends javax.swing.JFrame {
         String guestusername = jG_USERNAME.getText();
         String guestpassword = new String(jG_PASSWORD.getPassword());
 
-        if(guestusername.equals("bengrimm4") && guestpassword.equals("student")) {
-            JOptionPane.showMessageDialog(this, "Login successful!");
-            STUDENT dashbaord = new STUDENT();
-            dashbaord.setVisible(true);
-            this.dispose();
+        if(guestusername.isEmpty() || guestpassword.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Login Failed", JOptionPane.ERROR_MESSAGE);
         } else {
-            JOptionPane.showMessageDialog(this, "Invalid Username and Password.", "Login Failed", JOptionPane.ERROR_MESSAGE);
+            LoginDatabase.getInstance().loginStudent(guestusername, guestpassword, this);
         }
     }//GEN-LAST:event_jG_LOGINActionPerformed
 
