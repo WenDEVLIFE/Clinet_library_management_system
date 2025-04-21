@@ -6,10 +6,7 @@
 package group3_finalproject_omp;
 
 import database.*;
-import model.AdminModel;
-import model.BookModel;
-import model.LibraryModel;
-import model.StudentModel;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -30,11 +27,13 @@ public class ADMIN extends javax.swing.JFrame {
     DefaultTableModel model1;
     DefaultTableModel model2;
     DefaultTableModel model3;
+    DefaultTableModel model4;
 
     List<StudentModel> studentList;
     List<LibraryModel> librarianList;
     List<AdminModel> adminModelList;
     List<BookModel> bookList;
+    List<IssueBookModel> issueBookList;
     /**
      * Creates new form ADMIN
      */
@@ -84,6 +83,12 @@ public class ADMIN extends javax.swing.JFrame {
         AB_TABLE.setModel(model3);
 
         LoadBook();
+
+        String [] columns4 = {"Issue ID", "Issue Date", "Return Date", "Name", "ISBN", "Phone Number", "Email Address", "Status"};
+        model4 = new DefaultTableModel(columns4, 0);
+        IB_TABALE.setModel(model4);
+
+        LoadIssueBook();
 
 
 
@@ -549,6 +554,11 @@ public class ADMIN extends javax.swing.JFrame {
         IS_EDIT1.setRequestFocusEnabled(false);
         IS_EDIT1.setRolloverEnabled(false);
         IS_EDIT1.setVerifyInputWhenFocusTarget(false);
+        IS_EDIT1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IS_EDIT1ActionPerformed(evt);
+            }
+        });
         RETURN_BOOK_PANEL.add(IS_EDIT1, new org.netbeans.lib.awtextra.AbsoluteConstraints(754, 505, 131, 30));
 
         IS_CLEAR1.setBackground(new java.awt.Color(255, 166, 166));
@@ -1644,6 +1654,7 @@ public class ADMIN extends javax.swing.JFrame {
              IB_ISSUEDATE.setText("");
              IB_RETURNDATE.setText("");
 
+                LoadIssueBook();
          }
 
 
@@ -1660,6 +1671,46 @@ public class ADMIN extends javax.swing.JFrame {
         IB_ISSUEDATE.setText("");
         IB_RETURNDATE.setText("");
     }//GEN-LAST:event_IS_CLEARActionPerformed
+
+    // Added a function it will add the return books
+    private void IS_EDIT1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IS_EDIT1ActionPerformed
+        // TODO add your handling code here:
+        String issueID = RB_ISSUEID.getText();
+        String issueDate = RB_ISSUEDATE.getText();
+        String returnDate = RB_RETURNDATE.getText();
+        String status = RB_BOOKSTATUS.getText();
+        String isbn = RB_ISBN.getText();
+        String name = RB_NAME.getText();
+        String phone = RB_PHONENUMBER.getText();
+
+         if (issueID.isEmpty() || returnDate.isEmpty() || status.isEmpty() || isbn.isEmpty() || name.isEmpty() || phone.isEmpty()) {
+             JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+         } else {
+             Map<String, String> issueData = new HashMap<>();
+             issueData.put("isbn", isbn);
+             issueData.put("name", name);
+             issueData.put("phone_number", phone);
+             issueData.put("email_address", "N/A");
+             issueData.put("issue_id", issueID);
+             issueData.put("issue_date", issueDate);
+             issueData.put("return_date", returnDate);
+             issueData.put("status", status);
+
+             IssueBookDatabase.getInstance().insertIssueBook(issueData);
+                RB_ISBN.setText("");
+                RB_NAME.setText("");
+                RB_PHONENUMBER.setText("");
+                RB_ISSUEID.setText("");
+                RB_ISSUEDATE.setText("");
+                RB_RETURNDATE.setText("");
+                RB_BOOKSTATUS.setText("");
+
+             LoadIssueBook();
+         }
+
+
+
+    }//GEN-LAST:event_IS_EDIT1ActionPerformed
 
 
 
@@ -1748,6 +1799,28 @@ public class ADMIN extends javax.swing.JFrame {
             }
         } else {
             System.out.println("No books found.");
+        }
+    }
+
+    void LoadIssueBook() {
+        model4.setRowCount(0); // Clear existing rows
+        issueBookList = IssueBookDatabase.getInstance().getIssueBook();
+
+        if (issueBookList != null) {
+            for (IssueBookModel issue : issueBookList) {
+                model4.addRow(new Object[]{
+                        issue.getIssue_id(),
+                        issue.getIssue_date(),
+                        issue.getReturn_date(),
+                        issue.getName(),
+                        issue.getIsbn(),
+                        issue.getPhone_number(),
+                        issue.getEmail_address(),
+                        issue.getStatus()
+                });
+            }
+        } else {
+            System.out.println("No issued books found.");
         }
     }
 

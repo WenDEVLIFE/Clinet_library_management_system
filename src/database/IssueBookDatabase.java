@@ -1,8 +1,13 @@
 package database;
 
+import model.IssueBookModel;
+
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class IssueBookDatabase {
@@ -53,5 +58,36 @@ public class IssueBookDatabase {
         }
     }
 
+    public List<IssueBookModel> getIssueBook() {
+        String query = "SELECT * FROM issue_books";
+        List<IssueBookModel> issueBooks = new ArrayList<>();
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String id = resultSet.getString("book_id");
+                String issue_id = resultSet.getString("issue_id");
+                String issue_date = resultSet.getString("issue_date");
+                String return_date = resultSet.getString("return_date");
+                String name = resultSet.getString("name");
+                String isbn = resultSet.getString("isbn");
+                String phone_number = resultSet.getString("phone_number");
+                String email_address = resultSet.getString("email_address");
+                String status = resultSet.getString("status");
+
+                IssueBookModel issueBookModel = new IssueBookModel(id, issue_id, issue_date, return_date, name, isbn, phone_number, email_address, status);
+                issueBooks.add(issueBookModel);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return issueBooks;
+    }
+
     // Add methods for issuing books, returning books, etc.
+
 }
