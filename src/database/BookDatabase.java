@@ -1,6 +1,10 @@
 package database;
 
+import javax.swing.*;
 import java.awt.print.Book;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.util.Map;
 
 public class BookDatabase {
 
@@ -17,5 +21,36 @@ public class BookDatabase {
         return instance;
     }
 
+    public void insertBook(Map<String, String> bookData) {
+        String insertQuery = "INSERT INTO books (book_title, book_author, date_publish, book_genre, isbn, status) " +
+                "VALUES (?, ?, ?, ?, ?, ?)";
 
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(insertQuery);
+
+            int isbn = Integer.parseInt(bookData.get("isbn"));
+            preparedStatement.setString(1, bookData.get("book_title"));
+            preparedStatement.setString(2, bookData.get("book_author"));
+            preparedStatement.setString(3, bookData.get("date_published"));
+            preparedStatement.setString(4, bookData.get("book_genre"));
+            preparedStatement.setInt(5, isbn);
+            preparedStatement.setString(6,"Available");
+
+            int rowsInserted = preparedStatement.executeUpdate();
+
+            if (rowsInserted > 0) {
+                System.out.println("A new book was inserted successfully!");
+                // Optionally, you can show a success message to the user
+                JOptionPane.showMessageDialog(null, "Book registered successfully!");
+            } else {
+                System.out.println("Failed to insert the book.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
 }

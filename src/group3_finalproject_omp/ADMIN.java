@@ -6,6 +6,7 @@
 package group3_finalproject_omp;
 
 import database.AdminDatabase;
+import database.BookDatabase;
 import database.LibrarianDatabase;
 import database.StudentDatabase;
 import model.AdminModel;
@@ -404,6 +405,11 @@ public class ADMIN extends javax.swing.JFrame {
         AB_ADD.setRequestFocusEnabled(false);
         AB_ADD.setRolloverEnabled(false);
         AB_ADD.setVerifyInputWhenFocusTarget(false);
+        AB_ADD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AB_ADDActionPerformed(evt);
+            }
+        });
         ADD_BOOK_PANEL.add(AB_ADD, new org.netbeans.lib.awtextra.AbsoluteConstraints(787, 453, 131, 30));
 
         AB_EDIT.setBackground(new java.awt.Color(255, 166, 166));
@@ -1536,6 +1542,35 @@ public class ADMIN extends javax.swing.JFrame {
         AD_KEYPASS.setText("");
         AD_ADMINNUM.setText("");
     }//GEN-LAST:event_AD_CLEARActionPerformed
+
+    // This will add books
+    private void AB_ADDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AB_ADDActionPerformed
+        // TODO add your handling code here:
+        String bookTitle = AB_BOOK_TITLE.getText();
+        String bookAuthor = AB_BOOK_AUTHOR.getText();
+        String bookISBN = AB_ISBN.getText();
+        String bookGenre = AB_BOOK_GENRE.getText();
+        String bookDate = AB_DATE_PUB.getText();
+        if (bookTitle.isEmpty() || bookAuthor.isEmpty() || bookISBN.isEmpty() || bookGenre.isEmpty() || bookDate.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Map<String, String> bookData = new HashMap<>();
+            bookData.put("book_title", bookTitle);
+            bookData.put("book_author", bookAuthor);
+            bookData.put("isbn", bookISBN);
+            bookData.put("book_genre", bookGenre);
+            bookData.put("date_published", bookDate);
+
+            BookDatabase.getInstance().insertBook(bookData);
+            AB_BOOK_TITLE.setText("");
+            AB_BOOK_AUTHOR.setText("");
+            AB_ISBN.setText("");
+            AB_BOOK_GENRE.setText("");
+            AB_DATE_PUB.setText("");
+
+        }
+
+    }//GEN-LAST:event_AB_ADDActionPerformed
 
 
 
