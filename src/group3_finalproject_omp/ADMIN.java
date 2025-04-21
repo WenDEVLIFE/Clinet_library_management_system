@@ -7,6 +7,7 @@ package group3_finalproject_omp;
 
 import database.LibrarianDatabase;
 import database.StudentDatabase;
+import model.LibraryModel;
 import model.StudentModel;
 
 import javax.swing.*;
@@ -25,8 +26,10 @@ public class ADMIN extends javax.swing.JFrame {
     String fullname;
     String adminID;
     DefaultTableModel model;
+    DefaultTableModel model1;
 
     List<StudentModel> studentList;
+    List<LibraryModel> librarianList;
     /**
      * Creates new form ADMIN
      */
@@ -55,6 +58,15 @@ public class ADMIN extends javax.swing.JFrame {
         ST_TABLE.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         LoadStudent();
+
+        String[] columns1 = {"Librarian ID", "Full Name", "Birthdate", "Home Address", "GWA", "Phone Number", "Email Address"};
+        model1 = new DefaultTableModel(columns1, 0);
+        LB_TABLE.setModel(model1);
+// Disable auto-resizing to allow horizontal scrolling
+        LB_TABLE.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        LoadLibrarian();
+
     }
 
     /**
@@ -1421,6 +1433,27 @@ public class ADMIN extends javax.swing.JFrame {
             }
         } else {
             System.out.println("No students found.");
+        }
+    }
+
+    void LoadLibrarian() {
+        model1.setRowCount(0); // Clear existing rows
+        librarianList = LibrarianDatabase.getInstance().getLibrarian();
+
+        if (librarianList != null) {
+            for (LibraryModel librarian : librarianList) {
+                model1.addRow(new Object[]{
+                        librarian.getLibrarianId(),
+                        librarian.getFullName(),
+                        librarian.getEmailAddress(),
+                        librarian.getPhoneNumber(),
+                        librarian.getHomeAddress(),
+                        librarian.getBirthdate(),
+                        librarian.getGwa()
+                });
+            }
+        } else {
+            System.out.println("No librarians found.");
         }
     }
 

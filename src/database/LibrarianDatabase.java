@@ -1,8 +1,13 @@
 package database;
 
+import model.LibraryModel;
+
 import javax.swing.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class LibrarianDatabase {
@@ -53,5 +58,38 @@ public class LibrarianDatabase {
         } catch (Exception e) {
              e.printStackTrace();
         }
+    }
+
+    public List<LibraryModel> getLibrarian(){
+
+         List <LibraryModel> librarianList =  new ArrayList<>();
+        String query = "SELECT * FROM librarian";
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                String id = resultSet.getString("user_id");
+                String librarianId = resultSet.getString("librarian_id");
+                String fullName = resultSet.getString("full_name");
+                String password = resultSet.getString("password");
+                String birthdate = resultSet.getString("birthdate");
+                String homeAddress = resultSet.getString("home_address");
+                String gwa = String.valueOf(resultSet.getDouble("gwa"));
+                String phoneNumber = resultSet.getString("phone_number");
+                String emailAddress = resultSet.getString("email_address");
+
+                LibraryModel librarianModel = new LibraryModel(id, librarianId, fullName, password, birthdate, homeAddress, gwa, phoneNumber, emailAddress);
+
+                librarianList.add(librarianModel);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return librarianList;
+
     }
 }
