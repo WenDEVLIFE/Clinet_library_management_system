@@ -5,6 +5,7 @@ public class StudentModel {
     final String userid;
     final String username;
     final String password;
+    final String fullname;
     final String yearAndSection;
     final String homeAddress;
     final String emailAddress;
@@ -12,10 +13,11 @@ public class StudentModel {
     final String phoneNumber;
 
 
-    public StudentModel(String userid, String username, String password, String yearAndSection, String homeAddress, String emailAddress, String studentNumber, String phoneNumber) {
+    public StudentModel(String userid, String username, String fullname, String password, String yearAndSection, String homeAddress, String emailAddress, String studentNumber, String phoneNumber) {
         this.userid = userid;
         this.username = username;
         this.password = password;
+        this.fullname = fullname;
         this.yearAndSection = yearAndSection;
         this.homeAddress = homeAddress;
         this.emailAddress = emailAddress;
@@ -34,6 +36,12 @@ public class StudentModel {
     public String getPassword() {
         return password;
     }
+
+    public String getFullname() {
+        return fullname;
+    }
+
+
 
     public String getYearAndSection() {
         return yearAndSection;
@@ -61,6 +69,7 @@ public class StudentModel {
                 "userid='" + userid + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
+                ", fullname='" + fullname + '\'' +
                 ", yearAndSection='" + yearAndSection + '\'' +
                 ", homeAddress='" + homeAddress + '\'' +
                 ", emailAddress='" + emailAddress + '\'' +

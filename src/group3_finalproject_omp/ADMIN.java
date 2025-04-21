@@ -6,10 +6,13 @@
 package group3_finalproject_omp;
 
 import database.StudentDatabase;
+import model.StudentModel;
 
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +23,9 @@ public class ADMIN extends javax.swing.JFrame {
 
     String fullname;
     String adminID;
+    DefaultTableModel model;
+
+    List<StudentModel> studentList;
     /**
      * Creates new form ADMIN
      */
@@ -39,6 +45,15 @@ public class ADMIN extends javax.swing.JFrame {
         ADMIN_ACCOUNT_PANEL.setVisible(false);
         LIBRARIAN_ACCOUNT_PANEL.setVisible(false);
         STUDENT_ACCOUNT_PANEL.setVisible(false);
+
+        String[] columns = {"ID", "Username", "Student Number", "Email", "Phone Number", "Home Address", "Year and Section"};
+        model = new DefaultTableModel(columns, 0);
+        ST_TABLE.setModel(model);
+
+// Disable auto-resizing to allow horizontal scrolling
+        ST_TABLE.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        LoadStudent();
     }
 
     /**
@@ -1243,6 +1258,7 @@ public class ADMIN extends javax.swing.JFrame {
         STUDENT_ACCOUNT_PANEL.setVisible(true);
         LIBRARIAN_ACCOUNT_PANEL.setVisible(false);
         ADMIN_ACCOUNT_PANEL.setVisible(false);
+        LoadStudent();
     }//GEN-LAST:event_BUTTON_STUDENTMouseClicked
 
     private void BUTTON_LIBRARIANMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BUTTON_LIBRARIANMouseClicked
@@ -1323,13 +1339,42 @@ public class ADMIN extends javax.swing.JFrame {
             ST_HOMEADD.setText("");
             ST_PASSWORD.setText("");
             ST_CONFIRMPASS.setText("");
+            ST_USERNAME.setText("");
             ST_YEARSEC.setText("");
+
+            LoadStudent();
 
 
         }
 
 
     }//GEN-LAST:event_ST_CREATEActionPerformed
+
+    // Load the student data into the table
+    void LoadStudent() {
+        model.setRowCount(0); // Clear existing rows
+        studentList = StudentDatabase.getInstance().getStudent();
+
+        if (studentList != null) {
+            for (StudentModel student : studentList) {
+                model.addRow(new Object[]{
+                        student.getUserid(),
+                        student.getUsername(),
+                        student.getStudentNumber(),
+                        student.getEmailAddress(),
+                        student.getPhoneNumber(),
+                        student.getHomeAddress(),
+                        student.getYearAndSection()
+                });
+            }
+        } else {
+            System.out.println("No students found.");
+        }
+    }
+
+
+
+
 
     /**
      * @param args the command line arguments
