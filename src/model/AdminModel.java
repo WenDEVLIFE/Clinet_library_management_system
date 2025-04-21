@@ -10,8 +10,9 @@ public class AdminModel {
     final String emailAddress;
     final String homeAddress;
     final String adminNumber;
+    final String password;
 
-    public AdminModel(String id, String adminID, String fullname, String keyPassword, String educationAttainment, String phoneNumber, String emailAddress, String homeAddress, String adminNumber) {
+    public AdminModel(String id, String adminID, String fullname, String keyPassword, String educationAttainment, String phoneNumber, String emailAddress, String homeAddress, String adminNumber, String password) {
         this.id = id;
         this.adminID = adminID;
         this.fullname = fullname;
@@ -21,6 +22,7 @@ public class AdminModel {
         this.emailAddress = emailAddress;
         this.homeAddress = homeAddress;
         this.adminNumber = adminNumber;
+        this.password = password;
     }
 
     public String getId() {
@@ -56,6 +58,12 @@ public class AdminModel {
         return adminNumber;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+
+
     @Override
     public String toString() {
         return "AdminModel{" +
@@ -68,6 +76,7 @@ public class AdminModel {
                 ", emailAddress='" + emailAddress + '\'' +
                 ", homeAddress='" + homeAddress + '\'' +
                 ", adminNumber='" + adminNumber + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 

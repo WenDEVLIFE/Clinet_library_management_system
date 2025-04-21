@@ -79,10 +79,11 @@ public class AdminDatabase {
                 String educationAttainment = resultSet.getString("education_attainment");
                 String phoneNumber = resultSet.getString("phone_number");
                 String emailAddress = resultSet.getString("email_address");
+                String password = resultSet.getString("password");
                 String homeAddress = resultSet.getString("home_address");
                 String adminNumber = resultSet.getString("admin_number");
 
-                AdminModel adminModel = new AdminModel(id, adminID, fullname, keyPassword, educationAttainment, phoneNumber, emailAddress, homeAddress, adminNumber);
+                AdminModel adminModel = new AdminModel(id, adminID, fullname, keyPassword, educationAttainment, phoneNumber, emailAddress, homeAddress, adminNumber, password);
                 // Add the adminModel to a list or process it as needed
                 adminList.add(adminModel);
             }
@@ -108,6 +109,36 @@ public class AdminDatabase {
                 JOptionPane.showMessageDialog(null, "Admin deleted successfully!");
             } else {
                 System.out.println("Failed to delete the admin.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateAdmin(String adminID, Map<String, String> adminData) {
+        String query = "UPDATE admin SET password = ?, full_name = ?, key_pass = ?, education_attainment = ?, phone_number = ?, email_address = ?, home_address = ?, admin_number = ? WHERE admin_id = ?";
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+
+            preparedStatement.setString(1, adminData.get("password"));
+            preparedStatement.setString(2, adminData.get("full_name"));
+            preparedStatement.setString(3, adminData.get("key_pass"));
+            preparedStatement.setString(4, adminData.get("education_attainment"));
+            preparedStatement.setString(5, adminData.get("phone_number"));
+            preparedStatement.setString(6, adminData.get("email_address"));
+            preparedStatement.setString(7, adminData.get("home_address"));
+            preparedStatement.setString(8, adminData.get("admin_number"));
+            preparedStatement.setString(9, adminID);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Admin updated successfully!");
+                JOptionPane.showMessageDialog(null, "Admin updated successfully!");
+            } else {
+                System.out.println("Failed to update the admin.");
             }
         } catch (Exception e) {
             e.printStackTrace();
