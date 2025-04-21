@@ -92,4 +92,25 @@ public class AdminDatabase {
 
         return adminList;
     }
+
+    public void deleteAdmin(String adminID) {
+        String query = "DELETE FROM admin WHERE admin_id = ?";
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, adminID);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Admin deleted successfully!");
+                JOptionPane.showMessageDialog(null, "Admin deleted successfully!");
+            } else {
+                System.out.println("Failed to delete the admin.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

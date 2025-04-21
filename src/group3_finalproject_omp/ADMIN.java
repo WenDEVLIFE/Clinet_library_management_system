@@ -1140,6 +1140,11 @@ public class ADMIN extends javax.swing.JFrame {
         AD_REMOVE.setRequestFocusEnabled(false);
         AD_REMOVE.setRolloverEnabled(false);
         AD_REMOVE.setVerifyInputWhenFocusTarget(false);
+        AD_REMOVE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AD_REMOVEActionPerformed(evt);
+            }
+        });
         ADMIN_ACCOUNT_PANEL.add(AD_REMOVE, new org.netbeans.lib.awtextra.AbsoluteConstraints(769, 609, 120, 30));
 
         AD_HOMEADD.setBackground(new java.awt.Color(248, 243, 232));
@@ -1737,6 +1742,25 @@ public class ADMIN extends javax.swing.JFrame {
         RB_RETURNDATE.setText("");
         RB_BOOKSTATUS.setText("");
     }//GEN-LAST:event_IS_CLEAR1ActionPerformed
+
+    // This will delete the admin to the database
+    private void AD_REMOVEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AD_REMOVEActionPerformed
+        // TODO add your handling code here:
+
+        int selectedRow = AD_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            String adminID = model2.getValueAt(selectedRow, 0).toString();
+            // Remove the selected admin from the database
+            AdminDatabase.getInstance().deleteAdmin(adminID);
+            LoadAdmin();
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select an admin to remove.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+
+       
+    }//GEN-LAST:event_AD_REMOVEActionPerformed
 
 
 
