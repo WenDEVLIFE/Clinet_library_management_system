@@ -6,7 +6,9 @@
 package group3_finalproject_omp;
 import database.BookDatabase;
 import database.DisplayCountedDashboard;
+import database.IssueBookDatabase;
 import model.BookModel;
+import model.IssueBookModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -26,8 +28,10 @@ public class LIBRARIAN extends javax.swing.JFrame {
     int numberOfReturnedBooks;
     DefaultTableModel bookListTableModel;
     DefaultTableModel bookModel;
+    DefaultTableModel issueModel;
     List<BookModel> bookModelList;
     List<BookModel> bookList;
+    List<IssueBookModel> issueBookModelList;
 
     /**
      * Creates new form LIBRARIAN_DASHBOARD
@@ -56,6 +60,14 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_ADD_TABLE.setModel(bookModel);
 
         LoadBook();
+
+        String [] columns3 = {"Issue ID", "Issue Date", "Return Date", "Name", "ISBN", "Phone Number", "Email Address", "Status"};
+        issueModel = new DefaultTableModel(columns3, 0);
+        LIB_ISSUE_TABLE.setModel(issueModel);
+
+        LoadIssueBook();
+
+
 
 
     }
@@ -109,8 +121,8 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_ISSUE_TABLE = new javax.swing.JTable();
         LIB_IB_ISBN = new javax.swing.JTextField();
         LIB_IB_PHONENUM = new javax.swing.JTextField();
-        LIB_IB_EMAILADD = new javax.swing.JTextField();
-        LIB_ISBN4 = new javax.swing.JTextField();
+        LIB_IB_NAME = new javax.swing.JTextField();
+        LIB_EMAILADD = new javax.swing.JTextField();
         LIB_ISSUEID = new javax.swing.JTextField();
         LIB_IB_ISSUEDATE = new javax.swing.JTextField();
         LIB_IB_RETURN = new javax.swing.JTextField();
@@ -398,17 +410,27 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_IB_PHONENUM.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(55, 103, 166)));
         jP_LIB_ISSUEBOOK.add(LIB_IB_PHONENUM, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 509, 220, 25));
 
-        LIB_IB_EMAILADD.setBackground(new java.awt.Color(248, 243, 232));
-        LIB_IB_EMAILADD.setFont(new java.awt.Font("Candara Light", 1, 12)); // NOI18N
-        LIB_IB_EMAILADD.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        LIB_IB_EMAILADD.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(55, 103, 166)));
-        jP_LIB_ISSUEBOOK.add(LIB_IB_EMAILADD, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 457, 220, 25));
+        LIB_IB_NAME.setBackground(new java.awt.Color(248, 243, 232));
+        LIB_IB_NAME.setFont(new java.awt.Font("Candara Light", 1, 12)); // NOI18N
+        LIB_IB_NAME.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        LIB_IB_NAME.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(55, 103, 166)));
+        LIB_IB_NAME.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIB_IB_NAMEActionPerformed(evt);
+            }
+        });
+        jP_LIB_ISSUEBOOK.add(LIB_IB_NAME, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 457, 220, 25));
 
-        LIB_ISBN4.setBackground(new java.awt.Color(248, 243, 232));
-        LIB_ISBN4.setFont(new java.awt.Font("Candara Light", 1, 12)); // NOI18N
-        LIB_ISBN4.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        LIB_ISBN4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(55, 103, 166)));
-        jP_LIB_ISSUEBOOK.add(LIB_ISBN4, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 561, 220, 25));
+        LIB_EMAILADD.setBackground(new java.awt.Color(248, 243, 232));
+        LIB_EMAILADD.setFont(new java.awt.Font("Candara Light", 1, 12)); // NOI18N
+        LIB_EMAILADD.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        LIB_EMAILADD.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(55, 103, 166)));
+        LIB_EMAILADD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIB_EMAILADDActionPerformed(evt);
+            }
+        });
+        jP_LIB_ISSUEBOOK.add(LIB_EMAILADD, new org.netbeans.lib.awtextra.AbsoluteConstraints(326, 561, 220, 25));
 
         LIB_ISSUEID.setBackground(new java.awt.Color(248, 243, 232));
         LIB_ISSUEID.setFont(new java.awt.Font("Candara Light", 1, 12)); // NOI18N
@@ -446,6 +468,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_IB_ADD.setRequestFocusEnabled(false);
         LIB_IB_ADD.setRolloverEnabled(false);
         LIB_IB_ADD.setVerifyInputWhenFocusTarget(false);
+        LIB_IB_ADD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIB_IB_ADDActionPerformed(evt);
+            }
+        });
         jP_LIB_ISSUEBOOK.add(LIB_IB_ADD, new org.netbeans.lib.awtextra.AbsoluteConstraints(281, 618, 130, 30));
 
         LIB_IB_UPDATE.setBackground(new java.awt.Color(202, 231, 255));
@@ -458,6 +485,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_IB_UPDATE.setRequestFocusEnabled(false);
         LIB_IB_UPDATE.setRolloverEnabled(false);
         LIB_IB_UPDATE.setVerifyInputWhenFocusTarget(false);
+        LIB_IB_UPDATE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIB_IB_UPDATEActionPerformed(evt);
+            }
+        });
         jP_LIB_ISSUEBOOK.add(LIB_IB_UPDATE, new org.netbeans.lib.awtextra.AbsoluteConstraints(451, 618, 130, 30));
 
         LIB_IB_CLEAR.setBackground(new java.awt.Color(202, 231, 255));
@@ -470,6 +502,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_IB_CLEAR.setRequestFocusEnabled(false);
         LIB_IB_CLEAR.setRolloverEnabled(false);
         LIB_IB_CLEAR.setVerifyInputWhenFocusTarget(false);
+        LIB_IB_CLEAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIB_IB_CLEARActionPerformed(evt);
+            }
+        });
         jP_LIB_ISSUEBOOK.add(LIB_IB_CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(621, 618, 130, 30));
 
         LIB_IB_DELETE.setBackground(new java.awt.Color(114, 148, 192));
@@ -482,6 +519,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_IB_DELETE.setRequestFocusEnabled(false);
         LIB_IB_DELETE.setRolloverEnabled(false);
         LIB_IB_DELETE.setVerifyInputWhenFocusTarget(false);
+        LIB_IB_DELETE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIB_IB_DELETEActionPerformed(evt);
+            }
+        });
         jP_LIB_ISSUEBOOK.add(LIB_IB_DELETE, new org.netbeans.lib.awtextra.AbsoluteConstraints(791, 618, 130, 30));
 
         ISSUEBOOK_MANAGE.setIcon(new javax.swing.ImageIcon(getClass().getResource("/LIB/LIB_MANAGE_BOOK.png"))); // NOI18N
@@ -570,13 +612,18 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_RB_RETURN.setBackground(new java.awt.Color(202, 231, 255));
         LIB_RB_RETURN.setFont(new java.awt.Font("Microsoft PhagsPa", 1, 14)); // NOI18N
         LIB_RB_RETURN.setForeground(new java.awt.Color(114, 148, 192));
-        LIB_RB_RETURN.setText("CLEAR");
+        LIB_RB_RETURN.setText("CREATE");
         LIB_RB_RETURN.setBorder(null);
         LIB_RB_RETURN.setFocusPainted(false);
         LIB_RB_RETURN.setFocusable(false);
         LIB_RB_RETURN.setRequestFocusEnabled(false);
         LIB_RB_RETURN.setRolloverEnabled(false);
         LIB_RB_RETURN.setVerifyInputWhenFocusTarget(false);
+        LIB_RB_RETURN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIB_RB_RETURNActionPerformed(evt);
+            }
+        });
         jP_LIB_RETURNBOOK.add(LIB_RB_RETURN, new org.netbeans.lib.awtextra.AbsoluteConstraints(462, 618, 130, 30));
 
         LIB_RB_CLEAR.setBackground(new java.awt.Color(202, 231, 255));
@@ -589,6 +636,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_RB_CLEAR.setRequestFocusEnabled(false);
         LIB_RB_CLEAR.setRolloverEnabled(false);
         LIB_RB_CLEAR.setVerifyInputWhenFocusTarget(false);
+        LIB_RB_CLEAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                LIB_RB_CLEARActionPerformed(evt);
+            }
+        });
         jP_LIB_RETURNBOOK.add(LIB_RB_CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(632, 618, 130, 30));
 
         RETURNBOOK_MANAGE.setIcon(new javax.swing.ImageIcon(getClass().getResource("/LIB/LIB_MANAGE_BOOK.png"))); // NOI18N
@@ -704,7 +756,7 @@ public class LIBRARIAN extends javax.swing.JFrame {
         jP_LIB_ISSUEBOOK.setVisible(false);
         jP_LIB_RETURNBOOK.setVisible(false);
         jP_LIB_ACCOUNT.setVisible(false);
-        
+
         LIB_DASHBOARD.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_DASHBOARD_ACTIVE.png")));
         LIB_ADDBOOK.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ADD_BOOK.png")));
         LIB_ISSUEBOOK.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ISSUE_BOOK.png")));
@@ -718,7 +770,7 @@ public class LIBRARIAN extends javax.swing.JFrame {
         jP_LIB_ISSUEBOOK.setVisible(false);
         jP_LIB_RETURNBOOK.setVisible(false);
         jP_LIB_ACCOUNT.setVisible(false);
-        
+
         LIB_DASHBOARD.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_DASHBOARD.png")));
         LIB_ADDBOOK.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ADD_BOOK_ACTIVE.png")));
         LIB_ISSUEBOOK.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ISSUE_BOOK.png")));
@@ -732,8 +784,8 @@ public class LIBRARIAN extends javax.swing.JFrame {
         jP_LIB_ADDBOOK.setVisible(false);
         jP_LIB_RETURNBOOK.setVisible(false);
         jP_LIB_ACCOUNT.setVisible(false);
-        
-        
+
+
         LIB_DASHBOARD.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_DASHBOARD.png")));
         LIB_ADDBOOK.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ADD_BOOK.png")));
         LIB_ISSUEBOOK.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ISSUE_BOOK_ACTIVE.png")));
@@ -747,7 +799,7 @@ public class LIBRARIAN extends javax.swing.JFrame {
         jP_LIB_ADDBOOK.setVisible(false);
         jP_LIB_ISSUEBOOK.setVisible(false);
         jP_LIB_ACCOUNT.setVisible(false);
-        
+
         LIB_DASHBOARD.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_DASHBOARD.png")));
         LIB_ADDBOOK.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ADD_BOOK.png")));
         LIB_ISSUEBOOK.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ISSUE_BOOK.png")));
@@ -761,7 +813,7 @@ public class LIBRARIAN extends javax.swing.JFrame {
         jP_LIB_ADDBOOK.setVisible(false);
         jP_LIB_ISSUEBOOK.setVisible(false);
         jP_LIB_ACCOUNT.setVisible(true);
-        
+
         LIB_DASHBOARD.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_DASHBOARD.png")));
         LIB_ADDBOOK.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ADD_BOOK.png")));
         LIB_ISSUEBOOK.setIcon(new ImageIcon(getClass().getResource("/LIB/LIB_ISSUE_BOOK.png")));
@@ -896,6 +948,180 @@ public class LIBRARIAN extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AB_DELETEActionPerformed
 
+    // This will add the issue books
+    private void LIB_IB_ADDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_IB_ADDActionPerformed
+        // TODO add your handling code here:
+        String isbn = LIB_IB_ISBN.getText();
+        String name = LIB_IB_NAME.getText();
+        String phone = LIB_IB_PHONENUM.getText();
+        String email = LIB_EMAILADD.getText();
+        String issueID =  LIB_ISSUEID.getText();
+        String issueDate =  LIB_IB_ISSUEDATE.getText();
+        String returnDate =  LIB_IB_RETURN.getText();
+        String status =  LIB_IB_COMBO.getSelectedItem().toString();
+
+        if  (isbn.isEmpty() || name.isEmpty() || phone.isEmpty() || email.isEmpty() || issueID.isEmpty() || issueDate.isEmpty() || returnDate.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+        else {
+            Map<String, String> issueData = new HashMap<>();
+            issueData.put("isbn", isbn);
+            issueData.put("name", name);
+            issueData.put("phone_number", phone);
+            issueData.put("email_address", email);
+            issueData.put("issue_id", issueID);
+            issueData.put("issue_date", issueDate);
+            issueData.put("return_date", returnDate);
+            issueData.put("status", status);
+
+            IssueBookDatabase.getInstance().insertIssueBook(issueData);
+            LIB_IB_ISBN.setText("");
+            LIB_IB_NAME.setText("");
+            LIB_IB_PHONENUM.setText("");
+            LIB_EMAILADD.setText("");
+            LIB_ISSUEID.setText("");
+            LIB_IB_ISSUEDATE.setText("");
+            LIB_IB_RETURN.setText("");
+
+            LoadIssueBook();
+            InitializeDashboard();
+
+        }
+    }//GEN-LAST:event_LIB_IB_ADDActionPerformed
+
+    // This will update the issue book
+    private void LIB_IB_UPDATEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_IB_UPDATEActionPerformed
+        // TODO add your handling code here:
+
+        int selectedRow = LIB_ISSUE_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            // Retrieve current issue book details from the table
+            String issueID = issueModel.getValueAt(selectedRow, 0).toString();
+            String issueDate = issueModel.getValueAt(selectedRow, 1).toString();
+            String returnDate = issueModel.getValueAt(selectedRow, 2).toString();
+            String name = issueModel.getValueAt(selectedRow, 3).toString();
+            String isbn = issueModel.getValueAt(selectedRow, 4).toString();
+            String phoneNumber = issueModel.getValueAt(selectedRow, 5).toString();
+            String emailAddress = issueModel.getValueAt(selectedRow, 6).toString();
+            String status = issueModel.getValueAt(selectedRow, 7).toString();
+
+            // Create input fields
+            JTextField issueDateField = new JTextField(issueDate);
+            JTextField returnDateField = new JTextField(returnDate);
+            JTextField nameField = new JTextField(name);
+            JTextField isbnField = new JTextField(isbn);
+            JTextField phoneNumberField = new JTextField(phoneNumber);
+            JTextField emailAddressField = new JTextField(emailAddress);
+            JComboBox<String> statusComboBox = new JComboBox<>(new String[]{"AVAILABLE", "NOT AVAILABLE", "OVERDUE", "MISSING"});
+            statusComboBox.setSelectedItem(status);
+
+            // Create a panel to hold the input fields
+            JPanel panel = new JPanel(new GridLayout(8, 2, 5, 5));
+            panel.add(new JLabel("Issue ID:"));
+            panel.add(new JLabel(issueID));
+            panel.add(new JLabel("Issue Date:"));
+            panel.add(issueDateField);
+            panel.add(new JLabel("Return Date:"));
+            panel.add(returnDateField);
+            panel.add(new JLabel("Name:"));
+            panel.add(nameField);
+            panel.add(new JLabel("ISBN:"));
+            panel.add(isbnField);
+            panel.add(new JLabel("Phone Number:"));
+            panel.add(phoneNumberField);
+            panel.add(new JLabel("Email Address:"));
+            panel.add(emailAddressField);
+            panel.add(new JLabel("Status:"));
+            panel.add(statusComboBox);
+
+
+            // Show the dialog
+            int result = JOptionPane.showConfirmDialog(
+                    this, panel, "Edit Issue Book Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result == JOptionPane.OK_OPTION) {
+                // Retrieve updated values
+                String updatedIssueDate = issueDateField.getText();
+                String updatedReturnDate = returnDateField.getText();
+                String updatedName = nameField.getText();
+                String updatedIsbn = isbnField.getText();
+                String updatedPhoneNumber = phoneNumberField.getText();
+                String updatedEmailAddress = emailAddressField.getText();
+                String updatedStatus = statusComboBox.getSelectedItem().toString();
+
+                // Create a map for the updated data
+                Map<String, String> issueData = new HashMap<>();
+                issueData.put("issue_date", updatedIssueDate);
+                issueData.put("return_date", updatedReturnDate);
+                issueData.put("name", updatedName);
+                issueData.put("isbn", updatedIsbn);
+                issueData.put("phone_number", updatedPhoneNumber);
+                issueData.put("email_address", updatedEmailAddress);
+                issueData.put("status", updatedStatus);
+
+                // Update the issue book in the database
+                IssueBookDatabase.getInstance().updateIssueBook(issueID, issueData);
+
+                // Reload the issue book table
+                LoadIssueBook();
+                InitializeDashboard();
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select an issue book to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_LIB_IB_UPDATEActionPerformed
+
+    // This will clear the issue book
+    private void LIB_IB_CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_IB_CLEARActionPerformed
+        // TODO add your handling code here:
+        LIB_IB_ISBN.setText("");
+        LIB_IB_NAME.setText("");
+        LIB_IB_PHONENUM.setText("");
+        LIB_EMAILADD.setText("");
+        LIB_ISSUEID.setText("");
+        LIB_IB_ISSUEDATE.setText("");
+        LIB_IB_RETURN.setText("");
+    }//GEN-LAST:event_LIB_IB_CLEARActionPerformed
+
+    // This will delete the issue book
+    private void LIB_IB_DELETEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_IB_DELETEActionPerformed
+        // TODO add your handling code here:
+
+        int selectedRow = LIB_ISSUE_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            String issueID = issueModel.getValueAt(selectedRow, 0).toString();
+            // Remove the selected issue book from the database
+            IssueBookDatabase.getInstance().deleteIssueBook(issueID);
+            LoadIssueBook();
+            InitializeDashboard();
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select an issue book to remove.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+
+    }//GEN-LAST:event_LIB_IB_DELETEActionPerformed
+
+    // This will add the return books
+    private void LIB_RB_RETURNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_RB_RETURNActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LIB_RB_RETURNActionPerformed
+
+    // This will clear the return books
+    private void LIB_RB_CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_RB_CLEARActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LIB_RB_CLEARActionPerformed
+
+    private void LIB_IB_NAMEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_IB_NAMEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LIB_IB_NAMEActionPerformed
+
+    private void LIB_EMAILADDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_EMAILADDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_LIB_EMAILADDActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -903,7 +1129,7 @@ public class LIBRARIAN extends javax.swing.JFrame {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -973,6 +1199,28 @@ public class LIBRARIAN extends javax.swing.JFrame {
         }
     }
 
+    void LoadIssueBook() {
+        issueModel.setRowCount(0); // Clear existing rows
+        issueBookModelList = IssueBookDatabase.getInstance().getIssueBook();
+
+        if (issueBookModelList != null) {
+            for (IssueBookModel issue : issueBookModelList) {
+                issueModel.addRow(new Object[]{
+                        issue.getIssue_id(),
+                        issue.getIssue_date(),
+                        issue.getReturn_date(),
+                        issue.getName(),
+                        issue.getIsbn(),
+                        issue.getPhone_number(),
+                        issue.getEmail_address(),
+                        issue.getStatus()
+                });
+            }
+        } else {
+            System.out.println("No issued books found.");
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AB_ADD;
     private javax.swing.JButton AB_CLEAR;
@@ -995,19 +1243,19 @@ public class LIBRARIAN extends javax.swing.JFrame {
     private javax.swing.JLabel LIB_DATE_TIME;
     private javax.swing.JLabel LIB_DIVIDER;
     private javax.swing.JLabel LIB_EDIT_BUTTON;
+    private javax.swing.JTextField LIB_EMAILADD;
     private javax.swing.JButton LIB_IB_ADD;
     private javax.swing.JButton LIB_IB_CLEAR;
     private javax.swing.JComboBox<String> LIB_IB_COMBO;
     private javax.swing.JButton LIB_IB_DELETE;
-    private javax.swing.JTextField LIB_IB_EMAILADD;
     private javax.swing.JTextField LIB_IB_ISBN;
     private javax.swing.JTextField LIB_IB_ISSUEDATE;
     private javax.swing.JLabel LIB_IB_LAYOUT;
+    private javax.swing.JTextField LIB_IB_NAME;
     private javax.swing.JTextField LIB_IB_PHONENUM;
     private javax.swing.JTextField LIB_IB_RETURN;
     private javax.swing.JButton LIB_IB_UPDATE;
     private javax.swing.JTextField LIB_ISBN;
-    private javax.swing.JTextField LIB_ISBN4;
     private javax.swing.JLabel LIB_ISSUEBOOK;
     private javax.swing.JTextField LIB_ISSUEID;
     private javax.swing.JTable LIB_ISSUE_TABLE;

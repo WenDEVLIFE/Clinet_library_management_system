@@ -734,6 +734,11 @@ public class ADMIN extends javax.swing.JFrame {
         IS_EDIT.setRequestFocusEnabled(false);
         IS_EDIT.setRolloverEnabled(false);
         IS_EDIT.setVerifyInputWhenFocusTarget(false);
+        IS_EDIT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IS_EDITActionPerformed(evt);
+            }
+        });
         ISSUE_BOOK_PANEL.add(IS_EDIT, new org.netbeans.lib.awtextra.AbsoluteConstraints(754, 505, 131, 30));
 
         IS_CLEAR.setBackground(new java.awt.Color(255, 166, 166));
@@ -763,6 +768,11 @@ public class ADMIN extends javax.swing.JFrame {
         IS_DELETE.setRequestFocusEnabled(false);
         IS_DELETE.setRolloverEnabled(false);
         IS_DELETE.setVerifyInputWhenFocusTarget(false);
+        IS_DELETE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                IS_DELETEActionPerformed(evt);
+            }
+        });
         ISSUE_BOOK_PANEL.add(IS_DELETE, new org.netbeans.lib.awtextra.AbsoluteConstraints(754, 593, 131, 30));
 
         ISSUE_BOOK_LAYOUT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ADM_MANAGEBOOK/ADM_ISSUEBOOK_FRAME.png"))); // NOI18N
@@ -2116,6 +2126,16 @@ public class ADMIN extends javax.swing.JFrame {
         }
         }
     }//GEN-LAST:event_AB_EDITActionPerformed
+
+    // This will edit the issue books
+    private void IS_EDITActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IS_EDITActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IS_EDITActionPerformed
+
+    // This will delete the issue books
+    private void IS_DELETEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_IS_DELETEActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_IS_DELETEActionPerformed
 
      // This will edit the data of the admin
      private void AD_EDITActionPerformed(java.awt.event.ActionEvent evt) {                                        

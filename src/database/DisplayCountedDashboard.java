@@ -60,7 +60,7 @@ public class DisplayCountedDashboard {
     }
 
     public int getNumberOfReturnedBooks() {
-        String query = "SELECT COUNT(*) FROM issue_books WHERE status = 'Returned'";
+        String query = "SELECT COUNT(*) FROM issue_books WHERE status = 'RETURNED'";
         int count = 0;
 
         try (Connection connection = LibrarySQL.getConnection();
