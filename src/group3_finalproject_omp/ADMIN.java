@@ -1509,7 +1509,7 @@ public class ADMIN extends javax.swing.JFrame {
             ST_YEARSEC.setText("");
 
             LoadStudent();
-
+            initializeDashboard();
 
         }
 
@@ -1555,7 +1555,7 @@ public class ADMIN extends javax.swing.JFrame {
             LB_BIRTHDATE.setText("");
             LB_GWA.setText("");
             LoadLibrarian();
-
+            initializeDashboard();
         }
 
 
@@ -1604,6 +1604,7 @@ public class ADMIN extends javax.swing.JFrame {
             AD_KEYPASS.setText("");
             AD_ADMINNUM.setText("");
             LoadAdmin();
+            initializeDashboard();
 
         }
     }//GEN-LAST:event_AD_CREATEActionPerformed
@@ -1680,6 +1681,7 @@ public class ADMIN extends javax.swing.JFrame {
             AB_BOOK_GENRE.setText("");
             AB_DATE_PUB.setText("");
             LoadBook();
+            initializeDashboard();
 
         }
 
@@ -1733,6 +1735,7 @@ public class ADMIN extends javax.swing.JFrame {
              IB_RETURNDATE.setText("");
 
                 LoadIssueBook();
+             initializeDashboard();
          }
 
 
@@ -1784,6 +1787,7 @@ public class ADMIN extends javax.swing.JFrame {
                 RB_BOOKSTATUS.setText("");
 
              LoadReturnBook();
+             initializeDashboard();
          }
 
 
@@ -1813,6 +1817,7 @@ public class ADMIN extends javax.swing.JFrame {
             // Remove the selected admin from the database
             AdminDatabase.getInstance().deleteAdmin(adminID);
             LoadAdmin();
+            initializeDashboard();
         } else {
             JOptionPane.showMessageDialog(this, "Please select an admin to remove.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -1906,6 +1911,7 @@ public class ADMIN extends javax.swing.JFrame {
 
                 // Reload the student table
                 LoadStudent();
+                initializeDashboard();
 
             }
         } else {
@@ -1987,6 +1993,7 @@ public class ADMIN extends javax.swing.JFrame {
 
                 // Reload the librarian table
                 LoadLibrarian();
+                initializeDashboard();
 
             }
         }
@@ -2021,6 +2028,7 @@ public class ADMIN extends javax.swing.JFrame {
             // Remove the selected librarian from the database
             LibrarianDatabase.getInstance().deleteLibrarian(librarianID);
             LoadLibrarian();
+            initializeDashboard();
         } else {
             JOptionPane.showMessageDialog(this, "Please select a librarian to remove.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -2037,6 +2045,7 @@ public class ADMIN extends javax.swing.JFrame {
             // Remove the selected book from the database
             BookDatabase.getInstance().deleteBook(bookID);
             LoadBook();
+            initializeDashboard();
         } else {
             JOptionPane.showMessageDialog(this, "Please select a book to remove.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -2101,6 +2110,7 @@ public class ADMIN extends javax.swing.JFrame {
                 BookDatabase.getInstance().updateBook(bookID, bookData);
                 // Reload the book table
                 LoadBook();
+                initializeDashboard();
             } else {
             JOptionPane.showMessageDialog(this, "Please select a book to edit.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -2188,6 +2198,7 @@ public class ADMIN extends javax.swing.JFrame {
 
                  // Reload the admin table
                  LoadAdmin();
+                 initializeDashboard();
              }
          } else {
              JOptionPane.showMessageDialog(this, "Please select an admin to edit.", "Error", JOptionPane.ERROR_MESSAGE);

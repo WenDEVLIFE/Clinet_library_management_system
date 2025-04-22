@@ -4,14 +4,28 @@
  * and open the template in the editor.
  */
 package group3_finalproject_omp;
+import database.BookDatabase;
+import database.DisplayCountedDashboard;
+import model.BookModel;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 /**
  *
  * @author yuuki
  */
 public class LIBRARIAN extends javax.swing.JFrame {
+
+    int numberOfAvailableBooks;
+    int numberOfIssuedBooks;
+    int numberOfReturnedBooks;
+    DefaultTableModel bookListTableModel;
+    DefaultTableModel bookModel;
+    List<BookModel> bookModelList;
+    List<BookModel> bookList;
 
     /**
      * Creates new form LIBRARIAN_DASHBOARD
@@ -25,9 +39,34 @@ public class LIBRARIAN extends javax.swing.JFrame {
         jP_LIB_ADDBOOK.setVisible(false);
         jP_LIB_ISSUEBOOK.setVisible(false);
         jP_LIB_RETURNBOOK.setVisible(false);
-        jP_LIB_ACCOUNT.setVisible(false); 
+        jP_LIB_ACCOUNT.setVisible(false);
+
+        InitializeDashboard();
+
+
+        String [] columns1 = {"No", "Title", "Author", "Genre", "ISBN", "Status"};
+        bookListTableModel = new DefaultTableModel(columns1, 0);
+        jTable2.setModel(bookListTableModel);
+        LoadBookList();
+
+        String [] columns2 = {"Book ID", "Title", "Author", "Genre", "Date Published", "ISBN", "Status"};
+        bookModel = new DefaultTableModel(columns2, 0);
+        LIB_ADD_TABLE.setModel(bookModel);
+
+        LoadBook();
+
+
     }
 
+    void InitializeDashboard(){
+        numberOfAvailableBooks = DisplayCountedDashboard.getInstance().getNumberOfBooks();
+        numberOfIssuedBooks = DisplayCountedDashboard.getInstance().getNumberOfIssuedBooks();
+        numberOfReturnedBooks = DisplayCountedDashboard.getInstance().getNumberOfReturnedBooks();
+
+        LIB_NUMBER_AVAIL_BOOK.setText(String.valueOf(numberOfAvailableBooks));
+        LIB_NUMBER_ISSUED_BOOK.setText(String.valueOf(numberOfIssuedBooks));
+        LIB_NUMBER_RETURNED_BOOK.setText(String.valueOf(numberOfReturnedBooks));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,7 +83,6 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_NUMBER_RETURNED_BOOK = new javax.swing.JLabel();
         LIB_NUMBER_ISSUED_BOOK = new javax.swing.JLabel();
         LIB_NUMBER_AVAIL_BOOK = new javax.swing.JLabel();
-        LIB_BOOKLIST = new javax.swing.JLabel();
         LIB_DATE_TIME = new javax.swing.JLabel();
         LIB_BOOKS = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
@@ -144,9 +182,6 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LIB_NUMBER_AVAIL_BOOK.setFont(new java.awt.Font("Arial Black", 1, 48)); // NOI18N
         LIB_NUMBER_AVAIL_BOOK.setText("0");
         jP_LIB_DASHBOARD.add(LIB_NUMBER_AVAIL_BOOK, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 530, -1, -1));
-
-        LIB_BOOKLIST.setIcon(new javax.swing.ImageIcon(getClass().getResource("/LIB/LIB_BOOK_LIST.png"))); // NOI18N
-        jP_LIB_DASHBOARD.add(LIB_BOOKLIST, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 140, -1, -1));
 
         LIB_DATE_TIME.setIcon(new javax.swing.ImageIcon(getClass().getResource("/LIB/LIB_DATE_TIME.png"))); // NOI18N
         jP_LIB_DASHBOARD.add(LIB_DATE_TIME, new org.netbeans.lib.awtextra.AbsoluteConstraints(582, 163, -1, -1));
@@ -752,6 +787,47 @@ public class LIBRARIAN extends javax.swing.JFrame {
         });
     }
 
+    void LoadBookList() {
+        bookListTableModel.setRowCount(0); // Clear existing rows
+        bookModelList = BookDatabase.getInstance().getBooks();
+
+        if (bookModelList != null) {
+            for (BookModel book : bookModelList) {
+                bookListTableModel.addRow(new Object[]{
+                        book.getBook_id(),
+                        book.getBook_title(),
+                        book.getBook_author(),
+                        book.getBook_genre(),
+                        book.getIsbn(),
+                        book.getStatus(),
+                });
+            }
+        } else {
+            System.out.println("No books found.");
+        }
+    }
+
+    void LoadBook() {
+        bookModel.setRowCount(0); // Clear existing rows
+        bookList = BookDatabase.getInstance().getBooks();
+
+        if (bookList != null) {
+            for (BookModel book : bookList) {
+                bookModel.addRow(new Object[]{
+                        book.getBook_id(),
+                        book.getBook_title(),
+                        book.getBook_author(),
+                        book.getBook_genre(),
+                        book.getDate_published(),
+                        book.getIsbn(),
+                        book.getStatus(),
+                });
+            }
+        } else {
+            System.out.println("No books found.");
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AB_ADD;
     private javax.swing.JButton AB_CLEAR;
@@ -765,7 +841,6 @@ public class LIBRARIAN extends javax.swing.JFrame {
     private javax.swing.JLabel LIB_ADD_BOOK_LAYOUT;
     private javax.swing.JTable LIB_ADD_TABLE;
     private javax.swing.JLabel LIB_BACKGROUND_LAYOUT;
-    private javax.swing.JLabel LIB_BOOKLIST;
     private javax.swing.JLabel LIB_BOOKS;
     private javax.swing.JTextField LIB_BOOK_AUTHOR;
     private javax.swing.JTextField LIB_BOOK_GENRE;
