@@ -36,6 +36,14 @@ public class ADMIN extends javax.swing.JFrame {
     List<BookModel> bookList;
     List<IssueBookModel> issueBookList;
     List<IssueBookModel> returnBookList;
+
+    int numberOfAvailableBooks;
+    int numberOfIssuedBooks;
+    int numberOfReturnedBooks;
+    int numberOfOverdueBooks;
+    int numberOfStudents;
+    int numberOfLibrarians;
+    int numberOfAdmins;
     /**
      * Creates new form ADMIN
      */
@@ -98,9 +106,25 @@ public class ADMIN extends javax.swing.JFrame {
 
         LoadReturnBook();
 
+        initializeDashboard();
+    }
 
-
-
+    void initializeDashboard(){
+        numberOfAvailableBooks = DisplayCountedDashboard.getInstance().getNumberOfBooks();
+        numberOfIssuedBooks = DisplayCountedDashboard.getInstance().getNumberOfIssuedBooks();
+        numberOfReturnedBooks = DisplayCountedDashboard.getInstance().getNumberOfReturnedBooks();
+        numberOfOverdueBooks = DisplayCountedDashboard.getInstance().getNumberOfOverdueBooks();
+        numberOfStudents = DisplayCountedDashboard.getInstance().getNumberOfStudents();
+        numberOfLibrarians = DisplayCountedDashboard.getInstance().getNumberOfLibrarians();
+        numberOfAdmins = DisplayCountedDashboard.getInstance().getNumberOfAdmins();
+        NUMBER_AVAIL_BOOK.setText(String.valueOf(numberOfAvailableBooks));
+        NUMBER_ISSUED_BOOK.setText(String.valueOf(numberOfIssuedBooks));
+        NUMBER_RETURNED_BOOK.setText(String.valueOf(numberOfReturnedBooks));
+        NUMBER_OVERDUE.setText(String.valueOf(numberOfOverdueBooks));
+        jLabel2.setText(String.valueOf(numberOfOverdueBooks));
+        NUMBER_STUDENTS.setText(String.valueOf(numberOfStudents));
+        NUMBER_LIBRARIANS.setText(String.valueOf(numberOfLibrarians));
+        NUMBER_ADMINS.setText(String.valueOf(numberOfAdmins));
     }
 
     /**
