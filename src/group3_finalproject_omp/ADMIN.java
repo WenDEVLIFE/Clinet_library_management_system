@@ -2021,6 +2021,66 @@ public class ADMIN extends javax.swing.JFrame {
     // This is for edit the books
     private void AB_EDITActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AB_EDITActionPerformed
         // TODO add your handling code here:
+
+        int selectedRow = AB_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            // Retrieve current book details from the table
+            String bookID = model3.getValueAt(selectedRow, 0).toString();
+            String bookTitle = model3.getValueAt(selectedRow, 1).toString();
+            String bookAuthor = model3.getValueAt(selectedRow, 2).toString();
+            String bookGenre = model3.getValueAt(selectedRow, 3).toString();
+            String bookDate = model3.getValueAt(selectedRow, 4).toString();
+            String bookISBN = model3.getValueAt(selectedRow, 5).toString();
+
+            // Create input fields
+            JTextField bookTitleField = new JTextField(bookTitle);
+            JTextField bookAuthorField = new JTextField(bookAuthor);
+            JTextField bookISBNField = new JTextField(bookISBN);
+            JTextField bookGenreField = new JTextField(bookGenre);
+            JTextField bookDateField = new JTextField(bookDate);
+
+            // Create a panel to hold the input fields
+            JPanel panel = new JPanel(new GridLayout(5, 2, 5, 5));
+            panel.add(new JLabel("Book Title:"));
+            panel.add(bookTitleField);
+            panel.add(new JLabel("Book Author:"));
+            panel.add(bookAuthorField);
+            panel.add(new JLabel("ISBN:"));
+            panel.add(bookISBNField);
+            panel.add(new JLabel("Book Genre:"));
+            panel.add(bookGenreField);
+            panel.add(new JLabel("Date Published:"));
+            panel.add(bookDateField);
+
+            // Show the dialog
+            int result = JOptionPane.showConfirmDialog(
+                    this, panel, "Edit Book Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result == JOptionPane.OK_OPTION) {
+                // Retrieve updated values
+                String updatedBookTitle = bookTitleField.getText();
+                String updatedBookAuthor = bookAuthorField.getText();
+                String updatedBookISBN = bookISBNField.getText();
+                String updatedBookGenre = bookGenreField.getText();
+                String updatedBookDate = bookDateField.getText();
+
+                // Create a map for the updated data
+                Map<String, String> bookData = new HashMap<>();
+                bookData.put("book_title", updatedBookTitle);
+                bookData.put("book_author", updatedBookAuthor);
+                bookData.put("isbn", updatedBookISBN);
+                bookData.put("book_genre", updatedBookGenre);
+                bookData.put("date_published", updatedBookDate);
+                // Update the book in the database
+                BookDatabase.getInstance().updateBook(bookID, bookData);
+                // Reload the book table
+                LoadBook();
+            } else {
+            JOptionPane.showMessageDialog(this, "Please select a book to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        }
     }//GEN-LAST:event_AB_EDITActionPerformed
 
      // This will edit the data of the admin

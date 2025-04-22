@@ -89,7 +89,7 @@ public class BookDatabase {
     public void deleteBook(String bookID) {
         String deleteQuery = "DELETE FROM books WHERE book_id = ?";
 
-        try {A
+        try {
             Connection connection = LibrarySQL.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery);
             preparedStatement.setString(1, bookID);
@@ -101,6 +101,35 @@ public class BookDatabase {
                 JOptionPane.showMessageDialog(null, "Book deleted successfully!");
             } else {
                 System.out.println("Failed to delete the book.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateBook(String bookID, Map<String, String> bookData) {
+
+        String updateQuery = "UPDATE books SET book_title = ?, book_author = ?, date_publish = ?, book_genre = ?, isbn = ? WHERE book_id = ?";
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
+
+            preparedStatement.setString(1, bookData.get("book_title"));
+            preparedStatement.setString(2, bookData.get("book_author"));
+            preparedStatement.setString(3, bookData.get("date_published"));
+            preparedStatement.setString(4, bookData.get("book_genre"));
+            preparedStatement.setString(5, bookData.get("isbn"));
+            preparedStatement.setString(6, bookID);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Book updated successfully!");
+                JOptionPane.showMessageDialog(null, "Book updated successfully!");
+            } else {
+                System.out.println("Failed to update the book.");
             }
 
         } catch (Exception e) {
