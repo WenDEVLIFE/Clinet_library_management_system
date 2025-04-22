@@ -86,4 +86,25 @@ public class BookDatabase {
         return bookList;
    }
 
+    public void deleteBook(String bookID) {
+        String deleteQuery = "DELETE FROM books WHERE book_id = ?";
+
+        try {A
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(deleteQuery);
+            preparedStatement.setString(1, bookID);
+
+            int rowsDeleted = preparedStatement.executeUpdate();
+
+            if (rowsDeleted > 0) {
+                System.out.println("Book deleted successfully!");
+                JOptionPane.showMessageDialog(null, "Book deleted successfully!");
+            } else {
+                System.out.println("Failed to delete the book.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

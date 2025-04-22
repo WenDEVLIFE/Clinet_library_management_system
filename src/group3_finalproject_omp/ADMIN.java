@@ -444,6 +444,11 @@ public class ADMIN extends javax.swing.JFrame {
         AB_EDIT.setRequestFocusEnabled(false);
         AB_EDIT.setRolloverEnabled(false);
         AB_EDIT.setVerifyInputWhenFocusTarget(false);
+        AB_EDIT.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AB_EDITActionPerformed(evt);
+            }
+        });
         ADD_BOOK_PANEL.add(AB_EDIT, new org.netbeans.lib.awtextra.AbsoluteConstraints(787, 497, 131, 30));
 
         AB_CLEAR.setBackground(new java.awt.Color(255, 166, 166));
@@ -473,6 +478,11 @@ public class ADMIN extends javax.swing.JFrame {
         AB_DELETE.setRequestFocusEnabled(false);
         AB_DELETE.setRolloverEnabled(false);
         AB_DELETE.setVerifyInputWhenFocusTarget(false);
+        AB_DELETE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AB_DELETEActionPerformed(evt);
+            }
+        });
         ADD_BOOK_PANEL.add(AB_DELETE, new org.netbeans.lib.awtextra.AbsoluteConstraints(787, 585, 131, 30));
 
         ADD_BOOK_LAYOUT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ADM_MANAGEBOOK/ADM_ADDBOOK_FRAME.png"))); // NOI18N
@@ -1991,6 +2001,27 @@ public class ADMIN extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please select a librarian to remove.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_LB_REMOVEActionPerformed
+
+    // This will delete the book
+    private void AB_DELETEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AB_DELETEActionPerformed
+        // TODO add your handling code here:
+
+        int selectedRow = AB_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            String bookID = model3.getValueAt(selectedRow, 0).toString();
+            // Remove the selected book from the database
+            BookDatabase.getInstance().deleteBook(bookID);
+            LoadBook();
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a book to remove.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_AB_DELETEActionPerformed
+
+    // This is for edit the books
+    private void AB_EDITActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AB_EDITActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_AB_EDITActionPerformed
 
      // This will edit the data of the admin
      private void AD_EDITActionPerformed(java.awt.event.ActionEvent evt) {                                        
