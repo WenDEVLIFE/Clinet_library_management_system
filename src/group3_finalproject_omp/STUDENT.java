@@ -10,6 +10,7 @@ import database.IssueBookDatabase;
 import database.LibrarySQL;
 import model.BookModel;
 import model.BorrowBookModel;
+import model.PendingBorrowModel;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -32,8 +33,10 @@ public class STUDENT extends javax.swing.JFrame {
     int availableBooks;
     DefaultTableModel libraryStudentTableModel;
     DefaultTableModel borrowStudentTableModel;
+    DefaultTableModel borrowedStudentTableModel;
     List<BookModel> bookList;
     List<BorrowBookModel> borrowedBookList;
+    List<PendingBorrowModel> pendingBorrowList;
 
     /**
      * Creates new form GUEST_DASHBOARD
@@ -104,6 +107,27 @@ public class STUDENT extends javax.swing.JFrame {
         R_STUDENTNUM.setEditable(false);
         R_RETURNDATE.setEditable(false);
         R_BORROWEDDATE.setEditable(false);
+
+        String [] columm5  = {"Book Name", "Due"};
+        borrowedStudentTableModel = new DefaultTableModel(columm5, 0);
+        borrowTable.setModel(borrowedStudentTableModel);
+
+        LoadPendingBorrowList();
+
+    }
+
+    private void LoadPendingBorrowList() {
+
+        // Load the pending borrow list from the database
+        pendingBorrowList = BookDatabase.getInstance().getBorrowBookWithDueStatus(userid);
+        borrowedStudentTableModel.setRowCount(0); // Clear existing rows
+
+        for (PendingBorrowModel borrow : pendingBorrowList) {
+            String bookName = borrow.getBookTitle();
+            String dueStatus = borrow.getDueStatus();
+
+            borrowedStudentTableModel.addRow(new Object[]{bookName, dueStatus});
+        }
     }
 
 
@@ -133,6 +157,8 @@ public class STUDENT extends javax.swing.JFrame {
         STU_NUMBER_AVAIL_BOOK = new javax.swing.JLabel();
         STU_BOOKSHELF = new javax.swing.JLabel();
         STU_DATETIME = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        borrowTable = new javax.swing.JTable();
         STU_PENDINGS = new javax.swing.JLabel();
         STU_BOOKS = new javax.swing.JLabel();
         STU_DASHBOARD_LAYOUT = new javax.swing.JLabel();
@@ -200,6 +226,21 @@ public class STUDENT extends javax.swing.JFrame {
 
         STU_DATETIME.setIcon(new javax.swing.ImageIcon(getClass().getResource("/STU/STU_DATE_TIME.png"))); // NOI18N
         jP_STU_DASHBOARD.add(STU_DATETIME, new org.netbeans.lib.awtextra.AbsoluteConstraints(583, 426, -1, -1));
+
+        borrowTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(borrowTable);
+
+        jP_STU_DASHBOARD.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 190, 310, 150));
 
         STU_PENDINGS.setIcon(new javax.swing.ImageIcon(getClass().getResource("/STU/STU_BORROWED.png"))); // NOI18N
         jP_STU_DASHBOARD.add(STU_PENDINGS, new org.netbeans.lib.awtextra.AbsoluteConstraints(615, 157, -1, -1));
@@ -547,6 +588,9 @@ public class STUDENT extends javax.swing.JFrame {
             // Call the method to borrow the book
             BookDatabase.getInstance().borrowBook(userid,bookTitle, isbn, studentName, studentNum, borrowedDate, returnDate);
             LoadBookList();
+            LoadBorrowedBookList();
+            LoadPendingBorrowList();
+            initializeDashboard();
         } else {
             JOptionPane.showMessageDialog(this, "Please select a book to borrow.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -613,7 +657,8 @@ public class STUDENT extends javax.swing.JFrame {
             // Reload the borrowed book list
             LoadBorrowedBookList();
             LoadBookList(); // Reload the available books list
-        } else {
+            LoadPendingBorrowList();
+            initializeDashboard();
             JOptionPane.showMessageDialog(this, "Please select a book to return.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_R_RETURNActionPerformed
@@ -743,6 +788,7 @@ public class STUDENT extends javax.swing.JFrame {
     private javax.swing.JLabel STU_SETTINGS;
     private javax.swing.JLabel STU_YOURSHELF;
     private javax.swing.JLabel STU_YOURSHELF_LAYOUT;
+    private javax.swing.JTable borrowTable;
     private javax.swing.JPanel jP_STU_ACCOUNT;
     private javax.swing.JPanel jP_STU_DASHBOARD;
     private javax.swing.JPanel jP_STU_LIBRARY;
@@ -750,5 +796,6 @@ public class STUDENT extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     // End of variables declaration//GEN-END:variables
 }

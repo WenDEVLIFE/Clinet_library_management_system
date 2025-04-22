@@ -2,14 +2,16 @@ package database;
 
 import model.BookModel;
 import model.BorrowBookModel;
+import model.PendingBorrowModel;
 
 import javax.swing.*;
-import java.awt.print.Book;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -262,5 +264,52 @@ public class BookDatabase {
         }
 
         return borrowedBooks;
+    }
+
+    public List<PendingBorrowModel> getBorrowBookWithDueStatus(String userid) {
+        String query = "SELECT borrow_id, book_title, return_date FROM borrow_books WHERE user_id = ?";
+        List<PendingBorrowModel> pendingBorrowList = new ArrayList<>();
+
+        try (Connection connection = LibrarySQL.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            // Bind the user_id parameter
+            preparedStatement.setString(1, userid);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    String borrowId = resultSet.getString("borrow_id");
+                    String bookTitle = resultSet.getString("book_title");
+                    String returnDateStr = resultSet.getString("return_date");
+
+                    // Parse the return date
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+                    Date returnDate = dateFormat.parse(returnDateStr);
+                    Date currentDate = new Date();
+
+                    // Calculate the difference in days
+                    long diffInMillis = returnDate.getTime() - currentDate.getTime();
+                    long diffInDays = diffInMillis / (1000 * 60 * 60 * 24);
+
+                    // Determine the due status
+                    String dueStatus;
+                    if (diffInDays == 0) {
+                        dueStatus = "Today";
+                    } else if (diffInDays > 0) {
+                        dueStatus = diffInDays + " days left";
+                    } else {
+                        dueStatus = Math.abs(diffInDays) + " day(s) ago";
+                    }
+
+                    // Add to the list
+                    pendingBorrowList.add(new PendingBorrowModel(borrowId, bookTitle, dueStatus));
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return pendingBorrowList;
     }
 }
