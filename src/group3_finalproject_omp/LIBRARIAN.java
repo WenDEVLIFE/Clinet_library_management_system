@@ -8,10 +8,12 @@ import database.BookDatabase;
 import database.DisplayCountedDashboard;
 import model.BookModel;
 
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -285,6 +287,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         AB_ADD.setRequestFocusEnabled(false);
         AB_ADD.setRolloverEnabled(false);
         AB_ADD.setVerifyInputWhenFocusTarget(false);
+        AB_ADD.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AB_ADDActionPerformed(evt);
+            }
+        });
         jP_LIB_ADDBOOK.add(AB_ADD, new org.netbeans.lib.awtextra.AbsoluteConstraints(281, 600, 130, 30));
 
         AB_UPDATE.setBackground(new java.awt.Color(202, 231, 255));
@@ -297,6 +304,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         AB_UPDATE.setRequestFocusEnabled(false);
         AB_UPDATE.setRolloverEnabled(false);
         AB_UPDATE.setVerifyInputWhenFocusTarget(false);
+        AB_UPDATE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AB_UPDATEActionPerformed(evt);
+            }
+        });
         jP_LIB_ADDBOOK.add(AB_UPDATE, new org.netbeans.lib.awtextra.AbsoluteConstraints(451, 603, 130, 30));
 
         AB_CLEAR.setBackground(new java.awt.Color(202, 231, 255));
@@ -309,6 +321,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         AB_CLEAR.setRequestFocusEnabled(false);
         AB_CLEAR.setRolloverEnabled(false);
         AB_CLEAR.setVerifyInputWhenFocusTarget(false);
+        AB_CLEAR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AB_CLEARActionPerformed(evt);
+            }
+        });
         jP_LIB_ADDBOOK.add(AB_CLEAR, new org.netbeans.lib.awtextra.AbsoluteConstraints(621, 603, 130, 30));
 
         AB_DELETE.setBackground(new java.awt.Color(114, 148, 192));
@@ -321,6 +338,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         AB_DELETE.setRequestFocusEnabled(false);
         AB_DELETE.setRolloverEnabled(false);
         AB_DELETE.setVerifyInputWhenFocusTarget(false);
+        AB_DELETE.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AB_DELETEActionPerformed(evt);
+            }
+        });
         jP_LIB_ADDBOOK.add(AB_DELETE, new org.netbeans.lib.awtextra.AbsoluteConstraints(791, 603, 130, 30));
 
         ADDBOOK_MANAGE.setIcon(new javax.swing.ImageIcon(getClass().getResource("/LIB/LIB_MANAGE_BOOK.png"))); // NOI18N
@@ -750,6 +772,129 @@ public class LIBRARIAN extends javax.swing.JFrame {
     private void LIB_BOOK_TITLEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_BOOK_TITLEActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_LIB_BOOK_TITLEActionPerformed
+
+    // This will edit the book
+    private void AB_UPDATEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AB_UPDATEActionPerformed
+        // TODO add your handling code here:
+        // TODO add your handling code here:
+
+        int selectedRow = LIB_ADD_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            // Retrieve current book details from the table
+            String bookID = bookModel.getValueAt(selectedRow, 0).toString();
+            String bookTitle = bookModel.getValueAt(selectedRow, 1).toString();
+            String bookAuthor = bookModel.getValueAt(selectedRow, 2).toString();
+            String bookGenre = bookModel.getValueAt(selectedRow, 3).toString();
+            String bookDate = bookModel.getValueAt(selectedRow, 4).toString();
+            String bookISBN = bookModel.getValueAt(selectedRow, 5).toString();
+
+            // Create input fields
+            JTextField bookTitleField = new JTextField(bookTitle);
+            JTextField bookAuthorField = new JTextField(bookAuthor);
+            JTextField bookISBNField = new JTextField(bookISBN);
+            JTextField bookGenreField = new JTextField(bookGenre);
+            JTextField bookDateField = new JTextField(bookDate);
+
+            // Create a panel to hold the input fields
+            JPanel panel = new JPanel(new GridLayout(5, 2, 5, 5));
+            panel.add(new JLabel("Book Title:"));
+            panel.add(bookTitleField);
+            panel.add(new JLabel("Book Author:"));
+            panel.add(bookAuthorField);
+            panel.add(new JLabel("ISBN:"));
+            panel.add(bookISBNField);
+            panel.add(new JLabel("Book Genre:"));
+            panel.add(bookGenreField);
+            panel.add(new JLabel("Date Published:"));
+            panel.add(bookDateField);
+
+            // Show the dialog
+            int result = JOptionPane.showConfirmDialog(
+                    this, panel, "Edit Book Details", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result == JOptionPane.OK_OPTION) {
+                // Retrieve updated values
+                String updatedBookTitle = bookTitleField.getText();
+                String updatedBookAuthor = bookAuthorField.getText();
+                String updatedBookISBN = bookISBNField.getText();
+                String updatedBookGenre = bookGenreField.getText();
+                String updatedBookDate = bookDateField.getText();
+
+                // Create a map for the updated data
+                Map<String, String> bookData = new HashMap<>();
+                bookData.put("book_title", updatedBookTitle);
+                bookData.put("book_author", updatedBookAuthor);
+                bookData.put("isbn", updatedBookISBN);
+                bookData.put("book_genre", updatedBookGenre);
+                bookData.put("date_published", updatedBookDate);
+                // Update the book in the database
+                BookDatabase.getInstance().updateBook(bookID, bookData);
+                // Reload the book table
+                LoadBook();
+                InitializeDashboard();
+            } else {
+                JOptionPane.showMessageDialog(this, "Please select a book to edit.", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_AB_UPDATEActionPerformed
+
+    // This will add the books
+    private void AB_ADDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AB_ADDActionPerformed
+        // TODO add your handling code here:
+        String bookTitle = LIB_BOOK_TITLE.getText();
+        String bookAuthor =  LIB_BOOK_AUTHOR.getText();
+        String bookISBN =  LIB_ISBN.getText();
+        String bookGenre = LIB_BOOK_GENRE.getText();
+        String bookDate =  LIB_DATE_PUB.getText();
+        if (bookTitle.isEmpty() || bookAuthor.isEmpty() || bookISBN.isEmpty() || bookGenre.isEmpty() || bookDate.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Map<String, String> bookData = new HashMap<>();
+            bookData.put("book_title", bookTitle);
+            bookData.put("book_author", bookAuthor);
+            bookData.put("isbn", bookISBN);
+            bookData.put("book_genre", bookGenre);
+            bookData.put("date_published", bookDate);
+
+            BookDatabase.getInstance().insertBook(bookData);
+            LIB_BOOK_TITLE.setText("");
+            LIB_BOOK_AUTHOR.setText("");
+            LIB_ISBN.setText("");
+            LIB_BOOK_GENRE.setText("");
+            LIB_DATE_PUB.setText("");
+            LoadBook();
+            InitializeDashboard();
+
+        }
+    }//GEN-LAST:event_AB_ADDActionPerformed
+
+    // This will clear the books
+    private void AB_CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AB_CLEARActionPerformed
+        // TODO add your handling code here:
+        LIB_BOOK_TITLE.setText("");
+        LIB_BOOK_AUTHOR.setText("");
+        LIB_ISBN.setText("");
+        LIB_BOOK_GENRE.setText("");
+        LIB_DATE_PUB.setText("");
+    }//GEN-LAST:event_AB_CLEARActionPerformed
+
+    // This will delete the book
+    private void AB_DELETEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AB_DELETEActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = LIB_ADD_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            String bookID =bookModel.getValueAt(selectedRow, 0).toString();
+            // Remove the selected book from the database
+            BookDatabase.getInstance().deleteBook(bookID);
+            LoadBook();
+            InitializeDashboard();
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a book to remove.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_AB_DELETEActionPerformed
 
     /**
      * @param args the command line arguments
