@@ -1,12 +1,14 @@
 package database;
 
 import model.BookModel;
+import model.BorrowBookModel;
 
 import javax.swing.*;
 import java.awt.print.Book;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -225,5 +227,40 @@ public class BookDatabase {
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "An error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    public List<BorrowBookModel> getBorrowedBooks(String userid) {
+
+        String query = "SELECT * FROM borrow_books WHERE user_id = ?";
+        List<BorrowBookModel> borrowedBooks = new ArrayList<>();
+
+        try{
+
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, userid);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()){
+                String borrow_id = resultSet.getString("borrow_id");
+                String user_id = resultSet.getString("user_id");
+                String book_title = resultSet.getString("book_title");
+                String isbn = resultSet.getString("isbn");
+                String student_name = resultSet.getString("student_name");
+                String student_number = resultSet.getString("student_number");
+                String borrow_date = resultSet.getString("borrow_date");
+                String return_date = resultSet.getString("return_date");
+
+
+                BorrowBookModel bookModel = new BorrowBookModel(borrow_id, user_id, book_title, student_name, student_number, isbn, borrow_date, return_date);
+                borrowedBooks.add(bookModel);
+
+
+
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return borrowedBooks;
     }
 }

@@ -6,13 +6,19 @@
 package group3_finalproject_omp;
 import database.BookDatabase;
 import database.DisplayCountedDashboard;
+import database.IssueBookDatabase;
+import database.LibrarySQL;
 import model.BookModel;
+import model.BorrowBookModel;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -25,7 +31,9 @@ public class STUDENT extends javax.swing.JFrame {
     static String studentNo;
     int availableBooks;
     DefaultTableModel libraryStudentTableModel;
+    DefaultTableModel borrowStudentTableModel;
     List<BookModel> bookList;
+    List<BorrowBookModel> borrowedBookList;
 
     /**
      * Creates new form GUEST_DASHBOARD
@@ -67,6 +75,35 @@ public class STUDENT extends javax.swing.JFrame {
         B_ISBN.setEditable(false);
         B_STUDENTNAME.setEditable(false);
         B_STUDENTNUM.setEditable(false);
+
+
+        String [] columns2 = {"ID", "UserID", "Book Title", "ISBN", "Name", "Student Number", "Borrow Date", "Return Date"};
+        borrowStudentTableModel = new DefaultTableModel(columns2, 0);
+        STU_RETURN_TABLE.setModel(borrowStudentTableModel);
+
+        LoadBorrowedBookList();
+
+        STU_RETURN_TABLE.getSelectionModel().addListSelectionListener(event -> {
+            int selectedRow = STU_RETURN_TABLE.getSelectedRow();
+            if (selectedRow != -1) {
+                // Populate the fields with the selected row's data
+                R_BOOKTITLE.setText((String) borrowStudentTableModel.getValueAt(selectedRow, 2)); // Book Title
+                R_ISBN.setText((String) borrowStudentTableModel.getValueAt(selectedRow, 3)); // ISBN
+                R_RETURNDATE.setText((String) borrowStudentTableModel.getValueAt(selectedRow, 6)); // Return Date
+                R_BORROWEDDATE.setText((String) borrowStudentTableModel.getValueAt(selectedRow, 7)); // Borrowed Date
+            }
+        });
+
+        R_STUDENTNAME.setText(fullName);
+        R_STUDENTNUM.setText(studentNo);
+
+        // Make the fields non-editable
+        R_BOOKTITLE.setEditable(false);
+        R_ISBN.setEditable(false);
+        R_STUDENTNAME.setEditable(false);
+        R_STUDENTNUM.setEditable(false);
+        R_RETURNDATE.setEditable(false);
+        R_BORROWEDDATE.setEditable(false);
     }
 
 
@@ -339,6 +376,11 @@ public class STUDENT extends javax.swing.JFrame {
         R_RETURN.setRequestFocusEnabled(false);
         R_RETURN.setRolloverEnabled(false);
         R_RETURN.setVerifyInputWhenFocusTarget(false);
+        R_RETURN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R_RETURNActionPerformed(evt);
+            }
+        });
         jP_STU_YOURSHELF.add(R_RETURN, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 525, 130, 30));
 
         STU_YOURSHELF_LAYOUT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/STU/STU_YOU_SHELF_FRAME.png"))); // NOI18N
@@ -510,6 +552,71 @@ public class STUDENT extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_B_BORROWActionPerformed
 
+    private void R_RETURNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R_RETURNActionPerformed
+        int selectedRow = STU_RETURN_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            String borrowID = (String) borrowStudentTableModel.getValueAt(selectedRow, 0); // Assuming borrow ID is in column 0
+            String bookTitle = (String) borrowStudentTableModel.getValueAt(selectedRow, 2);
+            String isbn = (String) borrowStudentTableModel.getValueAt(selectedRow, 3);
+            String studentName = R_STUDENTNAME.getText();
+            String studentNum = R_STUDENTNUM.getText();
+            String borrowedDate = R_BORROWEDDATE.getText();
+            String returnDate = R_RETURNDATE.getText();
+
+            // Validate date format
+            if (!isValidDate(borrowedDate) || !isValidDate(returnDate)) {
+                JOptionPane.showMessageDialog(this, "Invalid date format. Please use MM/dd/yyyy.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            try (Connection connection = LibrarySQL.getConnection()) {
+                connection.setAutoCommit(false); // Start transaction
+
+                // Add to issue_books table
+                String issueID = String.valueOf(System.currentTimeMillis()); // Generate a unique ID
+                String insertIssueQuery = "INSERT INTO issue_books (issue_id, issue_date, return_date, name, isbn, phone_number, email_address, status) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+                try (PreparedStatement insertIssueStatement = connection.prepareStatement(insertIssueQuery)) {
+                    insertIssueStatement.setString(1, issueID);
+                    insertIssueStatement.setString(2, borrowedDate);
+                    insertIssueStatement.setString(3, returnDate);
+                    insertIssueStatement.setString(4, studentName);
+                    insertIssueStatement.setString(5, isbn);
+                    insertIssueStatement.setString(6, ""); // Add phone number if available
+                    insertIssueStatement.setString(7, ""); // Add email address if available
+                    insertIssueStatement.setString(8, "RETURNED");
+                    insertIssueStatement.executeUpdate();
+                }
+
+                // Update the book status to "Available"
+                String updateBookStatusQuery = "UPDATE books SET status = 'Available' WHERE isbn = ?";
+                try (PreparedStatement updateBookStatusStatement = connection.prepareStatement(updateBookStatusQuery)) {
+                    updateBookStatusStatement.setString(1, isbn);
+                    updateBookStatusStatement.executeUpdate();
+                }
+
+                // Delete the record from borrow_books
+                String deleteBorrowQuery = "DELETE FROM borrow_books WHERE borrow_id = ?";
+                try (PreparedStatement deleteBorrowStatement = connection.prepareStatement(deleteBorrowQuery)) {
+                    deleteBorrowStatement.setString(1, borrowID);
+                    deleteBorrowStatement.executeUpdate();
+                }
+
+                connection.commit(); // Commit transaction
+                JOptionPane.showMessageDialog(this, "Book returned successfully!");
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(this, "An error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+            // Reload the borrowed book list
+            LoadBorrowedBookList();
+            LoadBookList(); // Reload the available books list
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a book to return.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_R_RETURNActionPerformed
     void LoadBookList() {
         libraryStudentTableModel.setRowCount(0); // Clear existing rows
         bookList = BookDatabase.getInstance().getBooksAvailable();
@@ -540,6 +647,29 @@ public class STUDENT extends javax.swing.JFrame {
             return true;
         } catch (Exception e) {
             return false; // Invalid date format
+        }
+    }
+
+
+    void LoadBorrowedBookList() {
+        borrowStudentTableModel.setRowCount(0); // Clear existing rows
+        borrowedBookList = BookDatabase.getInstance().getBorrowedBooks(userid);
+
+        if (borrowedBookList != null) {
+            for (BorrowBookModel book : borrowedBookList) {
+                borrowStudentTableModel.addRow(new Object[]{
+                        book.getId(),
+                        book.getUserid(),
+                        book.getBookTitle(),
+                        book.getIsbn(),
+                        book.getStudentName(),
+                        book.getStudentNum(),
+                        book.getBorrowedDate(),
+                        book.getReturnDate(),
+                });
+            }
+        } else {
+            System.out.println("No borrowed books found.");
         }
     }
     /**

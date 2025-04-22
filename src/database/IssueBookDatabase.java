@@ -148,6 +148,36 @@ public class IssueBookDatabase {
         }
     }
 
+    public void returnBook(String issueID, Map<String, String> issueData) {
+        String updateQuery = "UPDATE issue_books SET issue_date = ?, return_date = ?, name = ?, isbn = ?, phone_number = ?, email_address = ?, status = ? WHERE issue_id = ?";
+
+        try {
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(updateQuery);
+
+            preparedStatement.setString(1, issueData.get("issue_date"));
+            preparedStatement.setString(2, issueData.get("return_date"));
+            preparedStatement.setString(3, issueData.get("name"));
+            preparedStatement.setString(4, issueData.get("isbn"));
+            preparedStatement.setString(5, issueData.get("phone_number"));
+            preparedStatement.setString(6, issueData.get("email_address"));
+            preparedStatement.setString(7, issueData.get("status"));
+            preparedStatement.setString(8, issueID);
+
+            int rowsUpdated = preparedStatement.executeUpdate();
+
+            if (rowsUpdated > 0) {
+                System.out.println("Issue book updated successfully!");
+                JOptionPane.showMessageDialog(null, "Issue book updated successfully!");
+            } else {
+                System.out.println("Failed to update the issue book.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void deleteIssueBook(String issueID) {
         String deleteQuery = "DELETE FROM issue_books WHERE issue_id = ?";
 
