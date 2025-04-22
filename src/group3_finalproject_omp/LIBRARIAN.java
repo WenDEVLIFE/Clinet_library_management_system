@@ -29,9 +29,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
     DefaultTableModel bookListTableModel;
     DefaultTableModel bookModel;
     DefaultTableModel issueModel;
+    DefaultTableModel model5;
     List<BookModel> bookModelList;
     List<BookModel> bookList;
     List<IssueBookModel> issueBookModelList;
+    List<IssueBookModel> returnBookModelList;
 
     /**
      * Creates new form LIBRARIAN_DASHBOARD
@@ -68,7 +70,11 @@ public class LIBRARIAN extends javax.swing.JFrame {
         LoadIssueBook();
 
 
+        String [] columns4 = {"Issue ID", "Issue Date", "Return Date", "Name", "ISBN", "Phone Number", "Status"};
+        model5 = new DefaultTableModel(columns4, 0);
+        LIB_RETURN_TABLE.setModel(model5);
 
+        LoadReturnBook();
 
     }
 
@@ -1107,11 +1113,49 @@ public class LIBRARIAN extends javax.swing.JFrame {
     // This will add the return books
     private void LIB_RB_RETURNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_RB_RETURNActionPerformed
         // TODO add your handling code here:
+        String issueID = LIB_RB_ISSUEID.getText();
+        String issueDate = LIB_RB_ISSUEDATAE.getText();
+        String returnDate = LIB_RB_RETURNDATE.getText();
+        String name = LIB_RB_NAME.getText();
+        String isbn = LIB_RB_ISBN.getText();
+        String phone = LIB_RB_PHONENUM.getText();
+        String status = LIB_RB_BOOKSTATUS.getText();
+        if (issueID.isEmpty() || issueDate.isEmpty() || returnDate.isEmpty() || name.isEmpty() || isbn.isEmpty() || phone.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please fill in all fields.", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            Map<String, String> returnData = new HashMap<>();
+            returnData.put("issue_id", issueID);
+            returnData.put("issue_date", issueDate);
+            returnData.put("return_date", returnDate);
+            returnData.put("name", name);
+            returnData.put("isbn", isbn);
+            returnData.put("phone_number", phone);
+            returnData.put("status", status);
+
+            IssueBookDatabase.getInstance().insertIssueBook(returnData);
+            LIB_RB_ISSUEID.setText("");
+            LIB_RB_ISSUEDATAE.setText("");
+            LIB_RB_RETURNDATE.setText("");
+            LIB_RB_NAME.setText("");
+            LIB_RB_ISBN.setText("");
+            LIB_RB_PHONENUM.setText("");
+
+            LoadReturnBook();
+            InitializeDashboard();
+
+        }
     }//GEN-LAST:event_LIB_RB_RETURNActionPerformed
 
     // This will clear the return books
     private void LIB_RB_CLEARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_RB_CLEARActionPerformed
         // TODO add your handling code here:
+        LIB_RB_ISSUEID.setText("");
+        LIB_RB_ISSUEDATAE.setText("");
+        LIB_RB_RETURNDATE.setText("");
+        LIB_RB_NAME.setText("");
+        LIB_RB_ISBN.setText("");
+        LIB_RB_PHONENUM.setText("");
+
     }//GEN-LAST:event_LIB_RB_CLEARActionPerformed
 
     private void LIB_IB_NAMEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LIB_IB_NAMEActionPerformed
@@ -1213,6 +1257,27 @@ public class LIBRARIAN extends javax.swing.JFrame {
                         issue.getIsbn(),
                         issue.getPhone_number(),
                         issue.getEmail_address(),
+                        issue.getStatus()
+                });
+            }
+        } else {
+            System.out.println("No issued books found.");
+        }
+    }
+
+    void LoadReturnBook() {
+        model5.setRowCount(0); // Clear existing rows
+        returnBookModelList = IssueBookDatabase.getInstance().getReturnBook();
+
+        if (returnBookModelList != null) {
+            for (IssueBookModel issue : returnBookModelList) {
+                model5.addRow(new Object[]{
+                        issue.getIssue_id(),
+                        issue.getIssue_date(),
+                        issue.getReturn_date(),
+                        issue.getName(),
+                        issue.getIsbn(),
+                        issue.getPhone_number(),
                         issue.getStatus()
                 });
             }
