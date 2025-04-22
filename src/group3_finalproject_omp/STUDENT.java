@@ -11,6 +11,7 @@ import model.BookModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -49,6 +50,23 @@ public class STUDENT extends javax.swing.JFrame {
         STU_BORROW_TABLE.setModel(libraryStudentTableModel);
         LoadBookList();
 
+        STU_BORROW_TABLE.getSelectionModel().addListSelectionListener(event -> {
+            int selectedRow = STU_BORROW_TABLE.getSelectedRow();
+            if (selectedRow != -1) {
+                // Populate the fields with the selected row's data
+                B_BOOKTITLE.setText((String) libraryStudentTableModel.getValueAt(selectedRow, 1)); // Book Title
+                B_ISBN.setText((String) libraryStudentTableModel.getValueAt(selectedRow, 4)); // ISBN
+            }
+        });
+
+        B_STUDENTNAME.setText(fullName);
+        B_STUDENTNUM.setText(studentNo);
+
+        // Make the fields non-editable
+        B_BOOKTITLE.setEditable(false);
+        B_ISBN.setEditable(false);
+        B_STUDENTNAME.setEditable(false);
+        B_STUDENTNUM.setEditable(false);
     }
 
 
@@ -468,6 +486,28 @@ public class STUDENT extends javax.swing.JFrame {
     // This will borrow the books
     private void B_BORROWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_BORROWActionPerformed
         // TODO add your handling code here:
+        int selectedRow = STU_BORROW_TABLE.getSelectedRow();
+
+        if (selectedRow != -1) {
+            String bookTitle = (String) libraryStudentTableModel.getValueAt(selectedRow, 1);
+            String isbn = (String) libraryStudentTableModel.getValueAt(selectedRow, 4);
+            String studentName = B_STUDENTNAME.getText();
+            String studentNum = B_STUDENTNUM.getText();
+            String borrowedDate = B_BORROWED_DATE.getText();
+            String returnDate = B_RETURNDATE.getText();
+
+            // Validate date format
+            if (!isValidDate(borrowedDate) || !isValidDate(returnDate)) {
+                JOptionPane.showMessageDialog(this, "Invalid date format. Please use MM/dd/yyyy.", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+
+            // Call the method to borrow the book
+            BookDatabase.getInstance().borrowBook(userid,bookTitle, isbn, studentName, studentNum, borrowedDate, returnDate);
+            LoadBookList();
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a book to borrow.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_B_BORROWActionPerformed
 
     void LoadBookList() {
@@ -490,6 +530,18 @@ public class STUDENT extends javax.swing.JFrame {
         }
     }
 
+
+    // Helper method to validate date format
+    private boolean isValidDate(String date) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        dateFormat.setLenient(false);
+        try {
+            dateFormat.parse(date); // Try parsing the date
+            return true;
+        } catch (Exception e) {
+            return false; // Invalid date format
+        }
+    }
     /**
      * @param args the command line arguments
      */

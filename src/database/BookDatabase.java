@@ -165,4 +165,65 @@ public class BookDatabase {
             e.printStackTrace();
         }
     }
+
+    public void borrowBook(String userid, String bookTitle, String isbn, String studentName, String studentNum, String borrowedDate, String returnDate) {
+        String checkQuery = "SELECT COUNT(*) FROM borrow_books WHERE user_id = ? AND isbn = ? AND book_title = ? AND student_number = ?";
+        String queryBorrow = "INSERT INTO borrow_books (user_id, book_title, isbn, student_name, student_number, borrow_date, return_date) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String updateStatusQuery = "UPDATE books SET status = 'Not Available' WHERE isbn = ?";
+
+        try (Connection connection = LibrarySQL.getConnection()) {
+            connection.setAutoCommit(false); // Start transaction
+
+            // Check if the user has already borrowed the book
+            try (PreparedStatement checkStatement = connection.prepareStatement(checkQuery)) {
+                checkStatement.setString(1, userid);
+                checkStatement.setString(2, isbn);
+                checkStatement.setString(3, bookTitle);
+                checkStatement.setString(4, studentNum);
+                ResultSet resultSet = checkStatement.executeQuery();
+
+                if (resultSet.next() && resultSet.getInt(1) > 0) {
+                    JOptionPane.showMessageDialog(null, "You have already borrowed this book.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            // Insert the borrow record
+            try (PreparedStatement borrowStatement = connection.prepareStatement(queryBorrow)) {
+                borrowStatement.setString(1, userid);
+                borrowStatement.setString(2, bookTitle);
+                borrowStatement.setString(3, isbn);
+                borrowStatement.setString(4, studentName);
+                borrowStatement.setString(5, studentNum);
+                borrowStatement.setString(6, borrowedDate);
+                borrowStatement.setString(7, returnDate);
+
+                int rowsInserted = borrowStatement.executeUpdate();
+                if (rowsInserted <= 0) {
+                    connection.rollback(); // Rollback transaction if insertion fails
+                    JOptionPane.showMessageDialog(null, "Failed to borrow the book.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            // Update the book status to "Not Available"
+            try (PreparedStatement updateStatusStatement = connection.prepareStatement(updateStatusQuery)) {
+                updateStatusStatement.setString(1, isbn);
+                int rowsUpdated = updateStatusStatement.executeUpdate();
+                if (rowsUpdated <= 0) {
+                    connection.rollback(); // Rollback transaction if update fails
+                    JOptionPane.showMessageDialog(null, "Failed to update book status.", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
+            connection.commit(); // Commit transaction
+            JOptionPane.showMessageDialog(null, "Book borrowed successfully!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "An error occurred: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
 }
