@@ -86,6 +86,35 @@ public class BookDatabase {
         return bookList;
    }
 
+    public List<BookModel> getBooksAvailable(){
+        String query = "SELECT * FROM books WHERE status = 'Available'";
+        List<BookModel> bookList = new ArrayList<>();
+
+        try{
+            Connection connection = LibrarySQL.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()){
+                String book_id = resultSet.getString("book_id");
+                String book_title = resultSet.getString("book_title");
+                String book_author = resultSet.getString("book_author");
+                String book_genre = resultSet.getString("book_genre");
+                String date_published = resultSet.getString("date_publish");
+                String isbn = resultSet.getString("isbn");
+                String status = resultSet.getString("status");
+
+                BookModel bookModel = new BookModel(book_id, book_title, book_author, book_genre, date_published, isbn, status);
+                bookList.add(bookModel);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return bookList;
+    }
+
     public void deleteBook(String bookID) {
         String deleteQuery = "DELETE FROM books WHERE book_id = ?";
 

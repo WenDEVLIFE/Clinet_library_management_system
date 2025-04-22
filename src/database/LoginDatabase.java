@@ -40,8 +40,11 @@ public class LoginDatabase {
             if (resultSet.next()) {
                 System.out.println("Login successful for student: " + username);
                 JOptionPane.showMessageDialog(null, "Login successful for student: " + username);
+                String userid = resultSet.getString("user_id");
+                String fullName = resultSet.getString("full_name");
+                String studentNo = resultSet.getString("student_number");
                 // Proceed to the next step, e.g., open the student dashboard
-                STUDENT dashbaord = new STUDENT();
+                STUDENT dashbaord = new STUDENT(userid, fullName, studentNo);
                 dashbaord.setVisible(true);
                 main.dispose();
             } else {

@@ -4,8 +4,14 @@
  * and open the template in the editor.
  */
 package group3_finalproject_omp;
+import database.BookDatabase;
+import database.DisplayCountedDashboard;
+import model.BookModel;
+
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 /**
  *
@@ -13,10 +19,20 @@ import javax.swing.JOptionPane;
  */
 public class STUDENT extends javax.swing.JFrame {
 
+    static String userid;
+    static  String fullName;
+    static String studentNo;
+    int availableBooks;
+    DefaultTableModel libraryStudentTableModel;
+    List<BookModel> bookList;
+
     /**
      * Creates new form GUEST_DASHBOARD
      */
-    public STUDENT() {
+    public STUDENT(String userid, String fullName, String studentNo) {
+        STUDENT.userid = userid;
+        STUDENT.fullName = fullName;
+        STUDENT.studentNo = studentNo;
         initComponents();
         
         setIconImage(new ImageIcon(getClass().getResource("/image_dashboard/omp(green).png")).getImage());
@@ -25,6 +41,25 @@ public class STUDENT extends javax.swing.JFrame {
         jP_STU_LIBRARY.setVisible(false);
         jP_STU_YOURSHELF.setVisible(false);
         jP_STU_ACCOUNT.setVisible(false);
+
+        initializeDashboard();
+
+        String [] columns1 = {"No", "Title", "Author", "Genre", "ISBN", "Status"};
+        libraryStudentTableModel = new DefaultTableModel(columns1, 0);
+        STU_BORROW_TABLE.setModel(libraryStudentTableModel);
+        LoadBookList();
+
+    }
+
+
+    void initializeDashboard(){
+        // Initialize the dashboard with data from the database
+        // For example, you can set the number of available books
+        availableBooks = DisplayCountedDashboard.getInstance().getNumberOfBooks();
+
+        STU_NUMBER_AVAIL_BOOK.setText(String.valueOf(availableBooks));
+
+
     }
 
     /**
@@ -198,6 +233,11 @@ public class STUDENT extends javax.swing.JFrame {
         B_BORROW.setRequestFocusEnabled(false);
         B_BORROW.setRolloverEnabled(false);
         B_BORROW.setVerifyInputWhenFocusTarget(false);
+        B_BORROW.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                B_BORROWActionPerformed(evt);
+            }
+        });
         jP_STU_LIBRARY.add(B_BORROW, new org.netbeans.lib.awtextra.AbsoluteConstraints(425, 525, 130, 30));
 
         STU_LIBRARY_LAYOUT.setIcon(new javax.swing.ImageIcon(getClass().getResource("/STU/STU_LIBRARY_FRAME.png"))); // NOI18N
@@ -425,6 +465,31 @@ public class STUDENT extends javax.swing.JFrame {
         STU_ACCOUNT.setIcon(new ImageIcon(getClass().getResource("/STU/STU_ACCOUNT_ACTIVE.png")));
     }//GEN-LAST:event_STU_ACCOUNTMouseClicked
 
+    // This will borrow the books
+    private void B_BORROWActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_B_BORROWActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_B_BORROWActionPerformed
+
+    void LoadBookList() {
+        libraryStudentTableModel.setRowCount(0); // Clear existing rows
+        bookList = BookDatabase.getInstance().getBooksAvailable();
+
+        if (bookList != null) {
+            for (BookModel book : bookList) {
+                libraryStudentTableModel.addRow(new Object[]{
+                        book.getBook_id(),
+                        book.getBook_title(),
+                        book.getBook_author(),
+                        book.getBook_genre(),
+                        book.getIsbn(),
+                        book.getStatus(),
+                });
+            }
+        } else {
+            System.out.println("No books found.");
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -456,7 +521,7 @@ public class STUDENT extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new STUDENT().setVisible(true);
+                new STUDENT(userid, fullName, studentNo).setVisible(true);
             }
         });
     }
