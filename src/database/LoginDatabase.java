@@ -83,7 +83,7 @@ public class LoginDatabase {
                 JOptionPane.showMessageDialog(null, "Welcome " + fullName + "!");
 
                 // Create admin dashboard and pass admin information
-                ADMIN dashboard = new ADMIN();
+                ADMIN dashboard = new ADMIN(adminId);
                 // Assuming ADMIN class has methods to set these values
 
                 dashboard.setVisible(true);

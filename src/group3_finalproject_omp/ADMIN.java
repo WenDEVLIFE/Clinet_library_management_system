@@ -44,10 +44,13 @@ public class ADMIN extends javax.swing.JFrame {
     int numberOfStudents;
     int numberOfLibrarians;
     int numberOfAdmins;
+    
+    static String adminId;
     /**
      * Creates new form ADMIN
      */
-    public ADMIN() {
+    public ADMIN(String adminId) {
+        ADMIN.adminId = adminId;
         initComponents();
          setIconImage(new ImageIcon(getClass().getResource("/ADM/omp(red).png")).getImage());
          
@@ -1824,10 +1827,16 @@ public class ADMIN extends javax.swing.JFrame {
 
         if (selectedRow != -1) {
             String adminID = model2.getValueAt(selectedRow, 0).toString();
-            // Remove the selected admin from the database
-            AdminDatabase.getInstance().deleteAdmin(adminID);
-            LoadAdmin();
-            initializeDashboard();
+            
+            if(adminId.equals(adminID)){
+                 JOptionPane.showMessageDialog(this, "You cannot remove your own account.", "Error", JOptionPane.ERROR_MESSAGE);
+
+            } else{
+                // Remove the selected admin from the database
+                AdminDatabase.getInstance().deleteAdmin(adminID);
+                LoadAdmin();
+                initializeDashboard();
+            }
         } else {
             JOptionPane.showMessageDialog(this, "Please select an admin to remove.", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -2393,7 +2402,7 @@ public class ADMIN extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ADMIN().setVisible(true);
+                new ADMIN(adminId).setVisible(true);
             }
         });
     }
